@@ -1,0 +1,58 @@
+{
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "lib": [
+      "dom", "dom.iterable", "esnext"
+    ],
+      
+    // Modules Configuration
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "noEmit": true,
+    "esModuleInterop": true,
+    
+    // Language and Environment Configuration
+    "target": "ESNext",
+    "jsx": "react-jsx",
+  
+    // JavaScript Support Configuration
+    "allowJs": true,
+    "checkJs": true,
+    // "verbatimModuleSyntax": true,
+    // Interop Constraints Configuration
+    "isolatedModules": true,
+    "allowUnusedLabels": false,
+    "allowUnreachableCode": false,
+    "noPropertyAccessFromIndexSignature": false,
+    "allowSyntheticDefaultImports": true,
+    "noImplicitOverride": true,
+    "useUnknownInCatchVariables": true,
+    "exactOptionalPropertyTypes": true,
+    "noFallthroughCasesInSwitch": true,
+    
+    //STRICT 
+    "alwaysStrict": true,
+    "strict": true,
+    "strictPropertyInitialization": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
+    
+    "noImplicitThis": true,
+    "noImplicitReturns": false,
+    "noImplicitAny": true,
+    
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "paths": {
+      "public/*": ["./public/*"],
+      "src/*": ["./src/*"],
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}

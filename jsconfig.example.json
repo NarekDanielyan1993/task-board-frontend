@@ -1,0 +1,16 @@
+// {
+//     "compilerOptions": {
+//         "allowJs": true,
+//         "allowSyntheticDefaultImports": true,
+//         "baseUrl": "./",
+//         "esModuleInterop": true,
+//         "moduleResolution": "node",
+//         "module": "ES2022",
+//         "resolveJsonModule": true,
+//         "strict": true,
+//         "paths": {
+//             "@/*": ["./*"],
+//             "@/components/*": ["./components/*"]
+//         }
+//     }
+// }

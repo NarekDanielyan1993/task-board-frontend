@@ -1,0 +1,120 @@
+/* eslint-disable camelcase */
+import { Box, Flex, Text } from '@chakra-ui/react';
+import IconButton from 'src/component/button/iconButton';
+import ConfirmationModal from 'src/component/modal/confirmationModal';
+import TextTruncate from 'src/component/textTruncate';
+import useDrag from 'src/hooks/useDrag';
+import useToggle from 'src/hooks/useToggle';
+import { useBoardContext } from 'src/pages/board/context';
+import {
+    boardSelectorState,
+    prioritiesSelector,
+} from 'src/store/board/selector';
+import { useAppSelector } from 'src/store/createStore';
+import { ITask } from 'src/types';
+import StageDateTag from './stageDateTag';
+import StagePriorityTag from './stagePriorityTag';
+import {
+    StyledStageItemContent,
+    StyledStageItemFooter,
+    StyledStageItemHeader,
+    StyledStageItemWrapper,
+} from './style';
+
+function StageItem({ task, index }: { task: ITask; index: number }) {
+    const {
+        summary,
+        due_date,
+        taskNumber,
+        attachments,
+        priorityId: taskPriorityId,
+        id,
+        stageId,
+        parentId,
+    } = task;
+
+    const { deleteTaskHandler, setOpenEditTaskDialog } = useBoardContext();
+    const { isLoading: isBoardLoading } = useAppSelector(boardSelectorState);
+    const { value: isConfirmOpen, toggle: setConfirm } = useToggle(false);
+    const { data: priorities } = useAppSelector(prioritiesSelector);
+
+    const priority = priorities.find((pr) => pr.value === taskPriorityId)
+        ?.label;
+
+    const { ref, isDragging } = useDrag<HTMLElement>({
+        id,
+        columnId: stageId,
+        index,
+    });
+
+    return (
+        <StyledStageItemWrapper
+            as="div"
+            cursor="grab"
+            opacity={isDragging ? 0 : 1}
+            ref={ref}
+            role="group"
+        >
+            <StyledStageItemHeader>
+                <TextTruncate text={summary} />
+            </StyledStageItemHeader>
+            <StyledStageItemContent>
+                <Flex gap={4} justify="left">
+                    {due_date ? <StageDateTag date={due_date} /> : null}
+                    {priority ? <StagePriorityTag text={priority} /> : null}
+                </Flex>
+            </StyledStageItemContent>
+            <StyledStageItemFooter>
+                <Flex flexWrap="wrap" gap={2} justify="center">
+                    <Text
+                        bgColor="brand.background.main"
+                        color="brand.primary.main"
+                        px={2}
+                        rounded="sm"
+                    >{`TN-${taskNumber}`}</Text>
+                    {Array.isArray(attachments) && attachments.length > 0 && (
+                        <>
+                            <IconButton
+                                ariaLabel="attachment-icon"
+                                cursor="default"
+                                iconName="attachment"
+                                pointerEvents="none"
+                            />
+                            <Text color="brand.primary.main">
+                                {attachments.length}
+                            </Text>
+                        </>
+                    )}
+                </Flex>
+                <Box display="flex" gap={2}>
+                    <IconButton
+                        ariaLabel="delete-task"
+                        iconName="delete"
+                        onClick={() => setConfirm()}
+                        variant="iconDelete"
+                    />
+                    <IconButton
+                        ariaLabel="edit-task"
+                        iconName="edit"
+                        onClick={() => setOpenEditTaskDialog(task)}
+                        variant="iconPrimary"
+                    />
+                    {isConfirmOpen ? (
+                        <ConfirmationModal
+                            actionFn={() =>
+                                deleteTaskHandler({ id, stageId, parentId })
+                            }
+                            content="Are you sure you want to delete task?"
+                            header="DELETE TASK"
+                            isLoading={isBoardLoading}
+                            isOpen={isConfirmOpen}
+                            onClose={() => setConfirm()}
+                        />
+                    ) : null}
+                </Box>
+            </StyledStageItemFooter>
+        </StyledStageItemWrapper>
+    );
+}
+
+export default StageItem;
