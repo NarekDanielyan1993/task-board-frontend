@@ -26,6 +26,7 @@ import {
     IGetStagesPayload,
     IGetSubCommentAction,
     IGetSubCommentPayload,
+    IGetTasksAction,
     ISeachTasksAction,
     ISearchTasksPayload,
     ISwitchStageTaskAction,
@@ -40,6 +41,7 @@ export const GET_STAGES = 'GET_STAGES';
 export const ADD_STAGE = 'ADD_STAGE';
 export const DELETE_STAGE = 'DELETE_STAGE';
 
+export const GET_TASKS = 'GET_TASKS';
 export const ADD_TASK = 'ADD_TASK';
 export const ADD_TASK_PROMISE = 'ADD_TASK_PROMISE';
 export const EDIT_TASK_PROMISE = 'EDIT_TASK_PROMISE';
@@ -113,6 +115,12 @@ export const getPriorities = (
     return {
         type: GET_PRIORITIES,
         payload: data,
+    };
+};
+
+export const getTasks = (): IGetTasksAction => {
+    return {
+        type: GET_TASKS,
     };
 };
 

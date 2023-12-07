@@ -1,9 +1,14 @@
 /* eslint-disable camelcase */
 import { Box, Flex, Text } from '@chakra-ui/react';
+import {
+    defaultAnimateLayoutChanges,
+    useSortable,
+    verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import IconButton from 'src/component/button/iconButton';
 import ConfirmationModal from 'src/component/modal/confirmationModal';
 import TextTruncate from 'src/component/textTruncate';
-import useDrag from 'src/hooks/useDrag';
 import useToggle from 'src/hooks/useToggle';
 import { useBoardContext } from 'src/pages/board/context';
 import {
@@ -21,14 +26,14 @@ import {
     StyledStageItemWrapper,
 } from './style';
 
-function StageItem({ task, index }: { task: ITask; index: number }) {
+function StageItem({ task }: { task: ITask }) {
     const {
         summary,
         due_date,
         taskNumber,
         attachments,
         priorityId: taskPriorityId,
-        id,
+        _id,
         stageId,
         parentId,
     } = task;
@@ -41,19 +46,28 @@ function StageItem({ task, index }: { task: ITask; index: number }) {
     const priority = priorities.find((pr) => pr.value === taskPriorityId)
         ?.label;
 
-    const { ref, isDragging } = useDrag<HTMLElement>({
-        id,
-        columnId: stageId,
-        index,
-    });
+    const { attributes, listeners, setNodeRef, transform, transition } =
+        useSortable({
+            id: _id,
+            data: { type: 'Task', task },
+            animateLayoutChanges: defaultAnimateLayoutChanges,
+            strategy: verticalListSortingStrategy,
+        });
+
+    const style = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+    };
 
     return (
         <StyledStageItemWrapper
+            ref={setNodeRef}
+            {...attributes}
+            {...listeners}
             as="div"
             cursor="grab"
-            opacity={isDragging ? 0 : 1}
-            ref={ref}
             role="group"
+            style={style}
         >
             <StyledStageItemHeader>
                 <TextTruncate text={summary} />
@@ -102,13 +116,17 @@ function StageItem({ task, index }: { task: ITask; index: number }) {
                     {isConfirmOpen ? (
                         <ConfirmationModal
                             actionFn={() =>
-                                deleteTaskHandler({ id, stageId, parentId })
+                                deleteTaskHandler({
+                                    id: _id,
+                                    stageId,
+                                    parentId,
+                                })
                             }
                             content="Are you sure you want to delete task?"
                             header="DELETE TASK"
                             isLoading={isBoardLoading}
                             isOpen={isConfirmOpen}
-                            onClose={() => setConfirm()}
+                            onClose={() => setConfirm(false)}
                         />
                     ) : null}
                 </Box>

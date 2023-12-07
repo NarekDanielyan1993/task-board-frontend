@@ -1,12 +1,10 @@
 import { ADD_STAGE, DELETE_STAGE, GET_STAGES } from 'src/store/board/action';
-import { ITask } from '..';
 
 export interface IStage {
     id: string;
     name: string;
     color: string;
     listPosition: number;
-    tasks: ITask[];
 }
 
 // store

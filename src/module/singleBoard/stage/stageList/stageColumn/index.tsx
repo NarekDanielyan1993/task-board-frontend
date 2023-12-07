@@ -1,23 +1,24 @@
 import { useBoardContext } from 'src/pages/board/context';
-import { IStage } from 'src/types';
-import { getRandomColor } from 'src/utills/helper';
+import { IStage, ITask } from 'src/types';
 import StageColumnHeader from './stageColumnHeader';
 import StageItemList from './stageItemList';
 import StyledStageColumn from './style';
 
-function StageColumn({ stage }: { stage: IStage }) {
-    const randomColor = getRandomColor();
+function StageColumn({ stage, tasks }: { tasks: ITask[]; stage: IStage }) {
     const { deleteStageHandler } = useBoardContext();
+
+    const stageTasks = tasks.filter((task) => task.stageId === stage.id);
     return (
-        <StyledStageColumn color={stage.color ?? randomColor}>
+        <StyledStageColumn>
             <StageColumnHeader
-                color={stage.color ?? randomColor}
+                color={stage.color}
                 onDelete={() => deleteStageHandler({ id: stage.id })}
-                tasksCount={stage.tasks.length}
+                tasksCount={stageTasks.length}
             >
                 {stage.name}
             </StageColumnHeader>
-            <StageItemList stage={stage} />
+
+            <StageItemList stage={stage} tasks={stageTasks} />
         </StyledStageColumn>
     );
 }

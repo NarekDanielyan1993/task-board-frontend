@@ -1,5 +1,6 @@
 import { Button, ModalBody, ModalFooter, ModalHeader } from '@chakra-ui/react';
 import ModalWrapper from 'src/component/modalWrapper';
+import useDidUpdate from 'src/hooks/useDidUpdate';
 
 function ConfirmationModal({
     isOpen,
@@ -18,6 +19,12 @@ function ConfirmationModal({
     actionButtonText?: string;
     isLoading?: boolean;
 }) {
+    useDidUpdate(() => {
+        if (!isLoading) {
+            onClose();
+        }
+    }, [isLoading]);
+
     return (
         <ModalWrapper isOpen={isOpen} onClose={onClose}>
             <ModalHeader>{header}</ModalHeader>

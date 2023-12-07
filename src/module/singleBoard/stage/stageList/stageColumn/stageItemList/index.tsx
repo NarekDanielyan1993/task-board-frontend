@@ -1,39 +1,40 @@
+/* eslint-disable no-underscore-dangle */
 import { Stack } from '@chakra-ui/react';
-import useDrop from 'src/hooks/useDrop';
-import { useBoardContext } from 'src/pages/board/context';
-import { switchTaskBetweenStages } from 'src/store/board/reducer';
-import { useAppDispatch } from 'src/store/createStore';
+import {
+    SortableContext,
+    verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
 import { IStage, ITask } from 'src/types';
+
+import { useDroppable } from '@dnd-kit/core';
 import StageItem from '../stageItem';
 
-function StageItemList({ stage }: { stage: IStage }) {
-    const { switchTaskBetweenStagesHandler } = useBoardContext();
-    const dispatch = useAppDispatch();
-    const { isOver, ref } = useDrop({
-        columnId: stage.id,
-        onDrop: (data) => {
-            dispatch(switchTaskBetweenStages(data));
-            switchTaskBetweenStagesHandler(data);
-        },
+function StageItemList({ stage, tasks }: { tasks: ITask[]; stage: IStage }) {
+    const { setNodeRef } = useDroppable({
+        id: stage.id,
+        data: { type: 'Column' },
     });
 
     return (
-        <Stack
-            direction={{ base: 'row', lg: 'column' }}
-            flexGrow={1}
-            gap={4}
-            overflowX="auto"
-            ref={ref}
-            sx={{ ...(isOver && { bgColor: 'brand.secondary.main' }) }}
+        <SortableContext
+            id={stage.id}
+            items={tasks.map((task) => task._id)}
+            strategy={verticalListSortingStrategy}
         >
-            {Array.isArray(stage.tasks) &&
-                stage.tasks.length > 0 &&
-                stage.tasks.map((task: ITask, index) => {
-                    return (
-                        <StageItem index={index} key={task.id} task={task} />
-                    );
-                })}
-        </Stack>
+            <Stack
+                direction={{ base: 'row', lg: 'column' }}
+                flexGrow={1}
+                gap={4}
+                overflowX="auto"
+                ref={setNodeRef}
+            >
+                {Array.isArray(tasks) &&
+                    tasks.length > 0 &&
+                    tasks.map((task: ITask) => {
+                        return <StageItem key={task._id} task={task} />;
+                    })}
+            </Stack>
+        </SortableContext>
     );
 }
 

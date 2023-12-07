@@ -24,6 +24,7 @@ function SubTaskForm({ taskId, stageId }: { taskId: string; stageId: string }) {
     });
 
     const formSubmitHandler = useCallback((formData: addSubtaskFormType) => {
+        console.log(taskId);
         addSubTaskHandler({
             summary: formData.summary,
             parentId: taskId,
