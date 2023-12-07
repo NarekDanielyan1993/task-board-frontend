@@ -16,7 +16,6 @@ import {
     IDeleteTaskPayload,
     IGetSubCommentPayload,
     IGetSubCommentResponse,
-    ISearchTaskResponse,
     ISearchTasksPayload,
     IStage,
     ITask,
@@ -37,6 +36,7 @@ import {
     GET_PRIORITIES,
     GET_STAGES,
     GET_SUB_COMMENT,
+    GET_TASKS,
     SEARCH_TASKS,
     SWITCH_STAGE_TASK,
     addCommentPromise,
@@ -64,13 +64,15 @@ import {
     getStagesInit,
     getStagesSuccess,
     getSubCommentsSuccess,
+    getTasksFailure,
+    getTasksInit,
+    getTasksSuccess,
     isBoardLoading,
     isCommentLoading,
     seIsSubTaskLoading,
     searchTasksSuccess,
     setIsSearchTasksLoading,
     setIsStageLoading,
-    switchTaskBetweenStages,
 } from './reducer';
 
 function* getBoardGenerator(action: PayloadAction<IGetBoardPayload>) {
@@ -95,14 +97,12 @@ function* getStagesGenerator(action: PayloadAction<IGetBoardPayload>) {
     yield put(getStagesInit());
     try {
         const { id } = action.payload;
-        console.log(id);
         const { data }: AxiosResponse<IStage[]> = yield call(
             apiSagaRequest,
             'get',
             STAGE_API.GET_ALL,
             { params: { id } }
         );
-        console.log(data);
         yield put(getStagesSuccess(data));
     } catch (error) {
         console.log(error);
@@ -164,6 +164,21 @@ function* getPrioritiesGenerator(action: PayloadAction<IGetBoardPayload>) {
     }
 }
 
+function* getTasksGenerator() {
+    yield put(getTasksInit());
+    try {
+        const { data }: AxiosResponse<ITask[]> = yield call(
+            apiSagaRequest,
+            'get',
+            TASK_API.GET_ALL
+        );
+        yield put(getTasksSuccess(data));
+    } catch (error) {
+        console.log(error);
+        yield put(getTasksFailure());
+    }
+}
+
 function* addTaskGeneratorPromise(
     action: typeof addTaskPromise.types.triggerAction
 ) {
@@ -183,7 +198,7 @@ function* addTaskGeneratorPromise(
         } catch (error) {
             console.log(error);
             yield put(isBoardLoading(false));
-            return null;
+            return Promise.reject(error);
         }
     });
 }
@@ -257,6 +272,7 @@ function* deleteTaskGenerator(action: PayloadAction<IDeleteTaskPayload>) {
     yield put(isBoardLoading(true));
     try {
         const deleteTaskData = action.payload;
+        console.log(deleteTaskData);
         yield call(apiSagaRequest, 'delete', TASK_API.DELETE, {
             data: { taskId: deleteTaskData.id },
         });
@@ -273,7 +289,7 @@ function* searchTasksGenerator(action: PayloadAction<ISearchTasksPayload>) {
     yield put(setIsSearchTasksLoading(true));
     try {
         const searchTasksData = action.payload;
-        const { data }: AxiosResponse<ISearchTaskResponse[]> = yield call(
+        const { data }: AxiosResponse<ITask[]> = yield call(
             apiSagaRequest,
             'get',
             TASK_API.SEARCH,
@@ -302,13 +318,15 @@ function* switchStageTaskGenerator(action: PayloadAction<IDropData>) {
         );
     } catch (error) {
         console.log(error);
-        yield put(
-            switchTaskBetweenStages({
-                from: taskData.to,
-                to: taskData.from,
-                id: taskData.id,
-            })
-        );
+        // yield put(
+        //     switchTaskBetweenStages({
+        //         from: taskData.to,
+        //         to: taskData.from,
+        //         id: taskData.id,
+        //         destinationIndex: taskData.destinationIndex,
+        //         sourceIndex: taskData.sourceIndex,
+        //     })
+        // );
     }
 }
 
@@ -355,7 +373,7 @@ function* addCommentGenerator(action: PayloadAction<IAddTaskPayload>) {
             COMMENT_API.ADD,
             addCommentData
         );
-        yield put(addCommentSuccess(data));
+        // yield put(addCommentSuccess(data));
         yield put(isCommentLoading(false));
     } catch (error) {
         console.log(error);
@@ -498,6 +516,7 @@ export default function* watchBoard() {
 
     yield takeLatest(GET_PRIORITIES, getPrioritiesGenerator);
 
+    yield takeLatest(GET_TASKS, getTasksGenerator);
     yield takeLatest(ADD_TASK, addTaskGenerator);
     yield takeLatest(addTaskPromise, addTaskGeneratorPromise);
     yield takeLatest(EDIT_TASK, editTaskGenerator);

@@ -9,6 +9,7 @@ import {
     EDIT_COMMENT,
     EDIT_TASK,
     GET_SUB_COMMENT,
+    GET_TASKS,
     SEARCH_TASKS,
     SWITCH_STAGE_TASK,
 } from 'src/store/board/action';
@@ -41,7 +42,7 @@ export interface ISubTask {
 
 export interface IAddEditTask {
     summary: string;
-    id: string;
+    _id: string;
     description: string;
     due_date: Date;
     priorityId: ISelectProps | null;
@@ -61,7 +62,7 @@ export interface ICommentCreateEdit {
 
 export interface ITask {
     summary: string;
-    id: string;
+    _id: string;
     taskNumber: number;
     description: string;
     due_date: string;
@@ -71,12 +72,7 @@ export interface ITask {
     comments: IComment[];
     attachments: IAttachment[];
     removedAttachments?: IAttachment[];
-    subTasks?: ISubTask[];
-}
-
-export interface ISearchTaskResponse {
-    stageId: string;
-    tasks: ITask[];
+    subTasks: ISubTask[];
 }
 
 export interface IAttachmentPreviewList {
@@ -102,6 +98,7 @@ export interface IGetSubCommentResponse {
 
 // STORE
 
+export type GET_TASKS_TYPE = typeof GET_TASKS;
 export type ADD_TASK_TYPE = typeof ADD_TASK;
 export type EDIT_TASK_TYPE = typeof EDIT_TASK;
 export type DELETE_TASK_TYPE = typeof DELETE_TASK;
@@ -115,6 +112,10 @@ export type ADD_COMMENT_TYPE = typeof ADD_COMMENT;
 export type EDIT_COMMENT_TYPE = typeof EDIT_COMMENT;
 export type DELETE_COMMENT_TYPE = typeof DELETE_COMMENT;
 export type GET_SUB_COMMENT_TYPE = typeof GET_SUB_COMMENT;
+
+export interface IGetTasksAction {
+    type: GET_TASKS_TYPE;
+}
 
 export interface IAddTaskPayload {
     summary: string;
@@ -135,8 +136,8 @@ export interface IAddTaskAction {
 }
 
 export interface IEditTaskPayload extends Partial<IAddTaskPayload> {
-    removedAttachments: IAttachment[];
-    appendAttachments: IAttachment[];
+    removedAttachments?: IAttachment[];
+    appendAttachments?: IAttachment[];
     id: string;
 }
 

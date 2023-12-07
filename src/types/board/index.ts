@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { GET_BOARD, GET_PRIORITIES, GET_STAGES } from 'src/store/board/action';
-import { ISelectProps, IStage } from '..';
+import { ISelectProps, IStage, ITask } from '..';
 
 export interface IBoard {
     id: string;
@@ -53,6 +53,11 @@ export interface IBoardState {
         isLoading: boolean;
         isFetched: boolean;
         data: IStage[];
+    };
+    tasks: {
+        isLoading: boolean;
+        isFetched: boolean;
+        data: ITask[];
     };
     stagesSelect: ISelectProps[];
     priorities: {

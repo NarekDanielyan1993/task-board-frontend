@@ -2,14 +2,19 @@ import { useNavigate, useParams } from 'react-router-dom';
 import withReduxDataFetching from 'src/component/hoc/widthReduxDataFetch';
 import BOARD_ROUTES from 'src/constant/route';
 import SingleBoard from 'src/module/singleBoard';
-import { getBoard, getPriorities, getStages } from 'src/store/board/action';
+
+import {
+    getBoard,
+    getPriorities,
+    getStages,
+    getTasks,
+} from 'src/store/board/action';
 import {
     boardSelector,
-    boardSelectorState,
     prioritiesSelector,
     stagesSelector,
+    tasksSelector,
 } from 'src/store/board/selector';
-import { useAppSelector } from 'src/store/createStore';
 import { BoardProvider } from './context';
 
 function BoardPage() {
@@ -22,13 +27,12 @@ function BoardPage() {
 
 export default () => {
     const { id } = useParams() as { id: string };
-    const { board } = useAppSelector(boardSelectorState);
     const navigate = useNavigate();
     if (!id) {
         navigate(BOARD_ROUTES.boards);
     }
 
-    let fetchArr = [
+    const fetchArr = [
         {
             action: () => getBoard({ id }),
             selector: boardSelector,
@@ -38,12 +42,13 @@ export default () => {
             selector: stagesSelector,
         },
         {
+            action: () => getTasks(),
+            selector: tasksSelector,
+        },
+        {
             action: () => getPriorities({ id }),
             selector: prioritiesSelector,
         },
     ];
-    if (board.data.id === id) {
-        fetchArr = [];
-    }
     return withReduxDataFetching(fetchArr, true)(BoardPage);
 };

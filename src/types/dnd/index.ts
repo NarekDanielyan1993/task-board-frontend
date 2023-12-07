@@ -2,11 +2,11 @@ export interface IDragItem {
     id: string;
     columnId: string;
     index: number;
-    // type: (typeof DND_ITEMS_TYPE)[keyof typeof DND_ITEMS_TYPE];
 }
 
-export interface IDropData {
-    id: string;
-    from: string;
-    to: string;
+export interface IDndTask {
+    sourceIndex: number;
+    destinationIndex: number;
+    stageId: string;
+    type: 'task' | 'stage';
 }

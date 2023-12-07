@@ -1,15 +1,13 @@
-import { memo } from 'react';
 import { stagesSelector } from 'src/store/board/selector';
 import { useAppSelector } from 'src/store/createStore';
-import { IStage } from 'src/types';
+import { IStage, ITask } from 'src/types';
 import StageColumn from './stageColumn';
 
-function StageList() {
+function StageList({ tasks }: { tasks: ITask[] }) {
     const { data: stages } = useAppSelector(stagesSelector);
-
     return stages?.map((stage: IStage) => {
-        return <StageColumn key={stage.id} stage={stage} />;
+        return <StageColumn key={stage.id} stage={stage} tasks={tasks} />;
     });
 }
 
-export default memo(StageList);
+export default StageList;

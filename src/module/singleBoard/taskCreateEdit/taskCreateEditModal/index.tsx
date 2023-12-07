@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import {
     Button,
     Grid,
@@ -40,8 +41,9 @@ function TaskCreateEditModal<T extends IAddTaskPayload | IEditTaskPayload>({
     onClose: () => void;
     onSubmit: (taskData: T) => void;
     title?: string;
-    data?: ITask;
+    data: ITask | null;
 }) {
+    console.log(data);
     const { data: priorities } = useAppSelector(prioritiesSelector);
     const { isLoading: isBoardLoading, stagesSelect } =
         useAppSelector(boardSelectorState);
@@ -98,12 +100,14 @@ function TaskCreateEditModal<T extends IAddTaskPayload | IEditTaskPayload>({
         name: 'removedAttachments',
     });
 
-    const { append: appendAttachment, fields: appendAttachments } =
-        useFieldArray<IAddEditTask, 'appendAttachments'>({
-            control,
-            shouldUnregister: !!data,
-            name: 'appendAttachments',
-        });
+    const { append: appendAttachment } = useFieldArray<
+        IAddEditTask,
+        'appendAttachments'
+    >({
+        control,
+        shouldUnregister: !!data,
+        name: 'appendAttachments',
+    });
 
     const appendAttachmentHandler = useCallback((attachment: IAttachment) => {
         append(attachment);
@@ -151,7 +155,7 @@ function TaskCreateEditModal<T extends IAddTaskPayload | IEditTaskPayload>({
             taskData.attachments = formData.appendAttachments as IAttachment[];
         }
         if (data) {
-            taskData.id = data.id;
+            taskData.id = data._id;
         }
         onSubmit(taskData)
             .then()
@@ -207,7 +211,7 @@ function TaskCreateEditModal<T extends IAddTaskPayload | IEditTaskPayload>({
                     </Grid>
                 </form>
                 {data && (
-                    <SubTask stageId={data.stageId} taskId={data.id}>
+                    <SubTask stageId={data.stageId} taskId={data._id}>
                         {Array.isArray(data.subTasks) &&
                             data.subTasks.length > 0 && (
                                 <SubTaskList subTasks={data.subTasks} />
@@ -221,7 +225,7 @@ function TaskCreateEditModal<T extends IAddTaskPayload | IEditTaskPayload>({
                     remove={removeAttachment}
                 />
                 {data ? (
-                    <Comment comments={data?.comments} taskId={data?.id} />
+                    <Comment comments={data?.comments} taskId={data._id} />
                 ) : null}
                 <Button
                     form="create-edit-task-form"
