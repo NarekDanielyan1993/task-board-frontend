@@ -25,4 +25,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm i
+    - run: |
+        touch .env
+        echo "${{secrets.TASK_BOARD_SECRET_FRONTEND}}" > .env
     - run: npm run build --if-present
