@@ -24,8 +24,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: ./svc.sh restart
-    - run: npm ci
+    -run: npm ci
     - run: |
         touch .env
         echo "${{secrets.TASK_BOARD_SECRET_FRONTEND}}" > .env
