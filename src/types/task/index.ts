@@ -148,7 +148,6 @@ export interface IEditTaskAction {
 
 export interface IDeleteTaskPayload {
     id: string;
-    stageId: string;
     parentId: string;
 }
 

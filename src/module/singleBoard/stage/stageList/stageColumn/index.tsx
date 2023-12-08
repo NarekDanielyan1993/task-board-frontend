@@ -8,6 +8,7 @@ function StageColumn({ stage, tasks }: { tasks: ITask[]; stage: IStage }) {
     const { deleteStageHandler } = useBoardContext();
 
     const stageTasks = tasks.filter((task) => task.stageId === stage.id);
+
     return (
         <StyledStageColumn>
             <StageColumnHeader

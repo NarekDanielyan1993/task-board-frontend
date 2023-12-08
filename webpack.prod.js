@@ -50,7 +50,7 @@ export default merge(common, {
             patterns: [{ from: './public', to: './public' }],
         }),
         new DotenvWebpackPlugin({
-            path: path.resolve('.env.production'),
+            path: path.resolve('.env'),
         }),
         new StatosCopePlugin({
             saveReportTo: './statsReports/report-[name]-[hash].html',

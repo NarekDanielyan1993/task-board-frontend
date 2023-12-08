@@ -265,9 +265,18 @@ const boardSlice = createSlice({
             state: IBoardState,
             action: PayloadAction<IDndTask>
         ) => {
-            const { sourceIndex, stageId, destinationIndex, type } =
-                action.payload;
-            if (type === 'task' && sourceIndex && destinationIndex) {
+            const { sourceId, destinationId, type } = action.payload;
+            console.log(sourceId);
+            console.log(destinationId);
+
+            if (type === 'task') {
+                const sourceIndex = state.tasks.data.findIndex(
+                    (t) => t._id === sourceId
+                );
+                const destinationIndex = state.tasks.data.findIndex(
+                    (t) => t._id === destinationId
+                );
+
                 state.tasks.data = state.tasks.data.map((task, index) => {
                     if (index === sourceIndex) {
                         return {
@@ -280,12 +289,14 @@ const boardSlice = createSlice({
                 arrayMove(state.tasks.data, sourceIndex, destinationIndex);
             }
             if (type === 'stage') {
-                console.log(stageId);
+                const sourceIndex = state.tasks.data.findIndex(
+                    (t) => t._id === sourceId
+                );
                 state.tasks.data = state.tasks.data.map((task, index) => {
                     if (index === sourceIndex) {
                         return {
                             ...task,
-                            stageId,
+                            stageId: destinationId,
                         };
                     }
                     return task;
@@ -317,34 +328,6 @@ const boardSlice = createSlice({
         ) => {
             state.isCommentLoading = action.payload;
         },
-        // addCommentSuccess: (
-        //     state: IBoardState,
-        //     action: PayloadAction<IComment>
-        // ) => {
-        //     const selectedStage = state.stages.data.find((stage) =>
-        //         stage.tasks.some((task) => task.id === action.payload.taskId)
-        //     ) as IStage;
-        //     state.stages.data = state.stages.data.map((stage) => {
-        //         if (stage.id === selectedStage.id) {
-        //             stage.tasks = stage.tasks.map((task) => {
-        //                 if (task.id === action.payload.taskId) {
-        //                     if (!task.comments) {
-        //                         task.comments = [];
-        //                     }
-        //                     console.log(task.comments);
-        //                     task.comments = addCommentsToTask(
-        //                         task.comments,
-        //                         action.payload.parentId,
-        //                         [action.payload],
-        //                         action.payload.ty
-        //                     );
-        //                 }
-        //                 return task;
-        //             });
-        //         }
-        //         return stage;
-        //     });
-        // },
         editCommentSuccess: (
             state: IBoardState,
             action: PayloadAction<IComment>

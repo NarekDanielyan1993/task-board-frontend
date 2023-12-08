@@ -5,8 +5,7 @@ export interface IDragItem {
 }
 
 export interface IDndTask {
-    sourceIndex: number;
-    destinationIndex: number;
-    stageId: string;
+    sourceId: string;
+    destinationId: string;
     type: 'task' | 'stage';
 }

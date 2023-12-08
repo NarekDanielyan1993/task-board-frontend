@@ -272,7 +272,6 @@ function* deleteTaskGenerator(action: PayloadAction<IDeleteTaskPayload>) {
     yield put(isBoardLoading(true));
     try {
         const deleteTaskData = action.payload;
-        console.log(deleteTaskData);
         yield call(apiSagaRequest, 'delete', TASK_API.DELETE, {
             data: { taskId: deleteTaskData.id },
         });

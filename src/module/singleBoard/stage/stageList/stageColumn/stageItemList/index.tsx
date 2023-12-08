@@ -19,6 +19,7 @@ function StageItemList({ stage, tasks }: { tasks: ITask[]; stage: IStage }) {
         <SortableContext
             id={stage.id}
             items={tasks.map((task) => task._id)}
+            key={stage.id}
             strategy={verticalListSortingStrategy}
         >
             <Stack

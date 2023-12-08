@@ -1,10 +1,6 @@
 /* eslint-disable camelcase */
 import { Box, Flex, Text } from '@chakra-ui/react';
-import {
-    defaultAnimateLayoutChanges,
-    useSortable,
-    verticalListSortingStrategy,
-} from '@dnd-kit/sortable';
+import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import IconButton from 'src/component/button/iconButton';
 import ConfirmationModal from 'src/component/modal/confirmationModal';
@@ -34,7 +30,6 @@ function StageItem({ task }: { task: ITask }) {
         attachments,
         priorityId: taskPriorityId,
         _id,
-        stageId,
         parentId,
     } = task;
 
@@ -50,10 +45,10 @@ function StageItem({ task }: { task: ITask }) {
         useSortable({
             id: _id,
             data: { type: 'Task', task },
-            animateLayoutChanges: defaultAnimateLayoutChanges,
-            strategy: verticalListSortingStrategy,
         });
 
+    console.log(transform);
+    console.log(transition);
     const style = {
         transform: CSS.Transform.toString(transform),
         transition,
@@ -118,7 +113,6 @@ function StageItem({ task }: { task: ITask }) {
                             actionFn={() =>
                                 deleteTaskHandler({
                                     id: _id,
-                                    stageId,
                                     parentId,
                                 })
                             }
