@@ -23,8 +23,11 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
+    - run: rm -rf node_modules/ --if-present
+    - name: clean cache
+      run: npm cache clean --force
+    - name: install
+      run: npm i
     - run: |
         touch .env
         echo "${{secrets.TASK_BOARD_SECRET_FRONTEND}}" > .env
