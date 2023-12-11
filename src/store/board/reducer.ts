@@ -200,7 +200,7 @@ const boardSlice = createSlice({
                         task.subTasks = [];
                     }
                     task.subTasks.push({
-                        id: action.payload._id,
+                        id: action.payload.id,
                         summary: action.payload.summary,
                         stageId: action.payload.stageId,
                         parentId: action.payload.parentId,
@@ -208,6 +208,10 @@ const boardSlice = createSlice({
                     return task;
                 }
                 return task;
+            });
+            state.tasks.data = state.tasks.data.concat({
+                ...action.payload,
+                _id: action.payload._id,
             });
         },
         editTaskSuccess: (state: IBoardState, action: PayloadAction<ITask>) => {
