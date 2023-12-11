@@ -47,7 +47,7 @@ export default merge(common, {
             cleanStaleWebpackAssets: false,
         }),
         new CopyWebpackPlugin({
-            patterns: [{ from: './public', to: './public' }],
+            patterns: [{ from: 'public', to: 'public' }],
         }),
         new DotenvWebpackPlugin({
             path: path.resolve('.env'),
