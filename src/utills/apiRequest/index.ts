@@ -16,6 +16,7 @@ console.log(process.env.SERVER_BASE_URL);
 
 axiosInstance.interceptors.request.use(
     (config) => {
+        console.log('sasas');
         if (!config.headers.Authorization) {
             const state = store.getState();
             config.headers.Authorization = `Bearer ${state.authState.accessToken}`;
@@ -41,8 +42,12 @@ axiosInstance.interceptors.response.use(
             store.dispatch(logInSuccess(data));
             return axiosInstance(prevRequest);
         }
-        if (prevRequest._retry && [403, 401].includes(error?.response.status)) {
+        if (
+            !error.response ||
+            (prevRequest._retry && [403, 401].includes(error?.response.status))
+        ) {
             store.dispatch(logout());
+            window.location.href = `/auth/login`;
         }
         return Promise.reject(error);
     }

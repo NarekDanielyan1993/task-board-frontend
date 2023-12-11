@@ -11,7 +11,6 @@ function AuthRoute() {
         <Routes>
             <Route element={<PublicRoute />}>
                 <Route element={<SignUpPage />} path={AUTH_ROUTES.SIGN_UP} />
-
                 <Route element={<LogInPage />} path={AUTH_ROUTES.LOGIN} />
             </Route>
             <Route
