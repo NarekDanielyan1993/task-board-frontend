@@ -105,6 +105,8 @@ function* refreshTokenGenerator() {
         );
         yield put(refreshTokenSuccess(data));
     } catch (error) {
+        Cookies.remove('isLoggedIn');
+        Cookies.remove('refreshToken');
         yield put(refreshTokenFailed());
         console.log(error);
     }
