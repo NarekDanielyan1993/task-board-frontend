@@ -24,10 +24,8 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: rm -rf node_modules/
-    - name: clean cache
-      run: npm cache clean --force
     - name: install
-      run: npm i
+      run: npm ci
     - run: |
         touch .env
         echo "${{secrets.TASK_BOARD_SECRET_FRONTEND}}" > .env
