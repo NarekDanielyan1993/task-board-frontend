@@ -286,7 +286,11 @@ const boardSlice = createSlice({
                     }
                     return task;
                 });
-                arrayMove(state.tasks.data, sourceIndex, destinationIndex);
+                state.tasks.data = arrayMove(
+                    state.tasks.data,
+                    sourceIndex,
+                    destinationIndex
+                );
             }
             if (type === 'stage') {
                 const sourceIndex = state.tasks.data.findIndex(
@@ -301,7 +305,11 @@ const boardSlice = createSlice({
                     }
                     return task;
                 });
-                arrayMove(state.tasks.data, sourceIndex, sourceIndex);
+                state.tasks.data = arrayMove(
+                    state.tasks.data,
+                    sourceIndex,
+                    sourceIndex
+                );
             }
         },
         deleteSubTaskSuccess: (
@@ -327,6 +335,18 @@ const boardSlice = createSlice({
             action: PayloadAction<boolean>
         ) => {
             state.isCommentLoading = action.payload;
+        },
+        addCommentSuccess: (
+            state: IBoardState,
+            action: PayloadAction<IComment>
+        ) => {
+            console.log(action.payload);
+            state.tasks.data = state.tasks.data.map((task) => {
+                if (task._id === action.payload.taskId) {
+                    task.comments = task.comments.concat(action.payload);
+                }
+                return task;
+            });
         },
         editCommentSuccess: (
             state: IBoardState,
@@ -408,6 +428,7 @@ export const {
     seIsSubTaskLoading,
 
     isCommentLoading,
+    addCommentSuccess,
     editCommentSuccess,
     deleteCommentSuccess,
     getSubCommentsSuccess,

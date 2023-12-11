@@ -33,9 +33,11 @@ function CommentItem({ comment }: { comment: IComment }) {
             case 'show': {
                 if (!Array.isArray(comment.comments)) {
                     setIsLoading(true);
+                    console.log('comment', comment);
                     getSubCommentsHandler({
-                        parentId: comment.id,
+                        parentId: comment._id || comment.id,
                         taskId: comment.taskId,
+                        type: 'get',
                     })
                         .then()
                         .finally(() => setIsLoading(false));
@@ -80,6 +82,7 @@ function CommentItem({ comment }: { comment: IComment }) {
 
     const onDeleteCommentHandler = useCallback(
         (data: IDeleteCommentPayload) => {
+            console.log('data', data);
             setIsLoading(true);
             deleteCommentHandler({
                 id: data.id,
@@ -91,14 +94,14 @@ function CommentItem({ comment }: { comment: IComment }) {
         },
         []
     );
-
     return (
         <>
             <StyledCommentWrapper>
                 {isLoading && <Loader sizes="md" />}
                 <CommentHeader
                     date={comment.date}
-                    id={comment.id}
+                    // eslint-disable-next-line no-underscore-dangle
+                    id={comment._id || comment.id}
                     name={comment.author}
                     onDelete={onDeleteCommentHandler}
                 />

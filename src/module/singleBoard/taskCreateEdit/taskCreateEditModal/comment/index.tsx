@@ -16,7 +16,6 @@ function Comment({
     comments: IComment[];
     taskId: string;
 }) {
-    console.log(comments);
     const { addCommentHandler } = useBoardContext();
     const { isCommentLoading } = useAppSelector(boardSelectorState);
     const onAddCommentHandler = useCallback((data: AddEditCommentFormType) => {

@@ -20,7 +20,6 @@ function IconButton({
     cursor = 'pointer',
     tooltip = '',
 }: IIconButton) {
-    console.log(455);
     const icons = {
         delete: <DeleteIcon color="brand.error.main" />,
         edit: <EditIcon />,

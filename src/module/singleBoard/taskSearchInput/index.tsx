@@ -20,7 +20,7 @@ function TaskSearchInput({ isDisabled }: { isDisabled: boolean }) {
     const {
         handleSubmit,
         FormField,
-        formState: { isValid, touchedFields },
+        // formState: { isValid },
     } = useForm<SearchTasksValidationSchemaTypes>({
         defaultValues,
         validationSchema: searchTasksValidationSchema,
@@ -29,8 +29,6 @@ function TaskSearchInput({ isDisabled }: { isDisabled: boolean }) {
     const formSubmitHandler = (data: SearchTasksValidationSchemaTypes) => {
         searchTasksHandler(data);
     };
-    console.log(isValid);
-    console.log(isDisabled);
 
     return (
         <StyledTaskSearchForm onSubmit={handleSubmit(formSubmitHandler)}>

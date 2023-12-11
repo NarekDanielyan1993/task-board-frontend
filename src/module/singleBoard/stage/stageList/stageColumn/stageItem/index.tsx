@@ -45,10 +45,11 @@ function StageItem({ task }: { task: ITask }) {
         useSortable({
             id: _id,
             data: { type: 'Task', task },
+            transition: {
+                duration: 500,
+                easing: 'cubic-bezier(0.25, 1, 0.5, 1)',
+            },
         });
-
-    console.log(transform);
-    console.log(transition);
     const style = {
         transform: CSS.Transform.toString(transform),
         transition,

@@ -13,7 +13,7 @@ export function addCommentsToTask(
         return updatedComments;
     }
     return comments.map((comment) => {
-        if (comment.id === parentId) {
+        if (comment._id === parentId || comment.id === parentId) {
             if (!comment.comments) {
                 comment.comments = [];
             }
@@ -59,7 +59,8 @@ export function findCommentAndRemove(
     commentId: string
 ): IComment[] {
     const updatedComments = comments.reduce((acc, comment) => {
-        if (comment.id === commentId) {
+        // eslint-disable-next-line no-underscore-dangle
+        if (comment._id === commentId || comment.id === commentId) {
             return acc;
         }
 

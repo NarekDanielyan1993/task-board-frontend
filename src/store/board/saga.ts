@@ -47,6 +47,7 @@ import {
     getSubCommentsPromise,
 } from './action';
 import {
+    addCommentSuccess,
     addStageSuccess,
     addSubTaskSuccess,
     addTaskSuccess,
@@ -372,7 +373,7 @@ function* addCommentGenerator(action: PayloadAction<IAddTaskPayload>) {
             COMMENT_API.ADD,
             addCommentData
         );
-        // yield put(addCommentSuccess(data));
+        yield put(addCommentSuccess(data));
         yield put(isCommentLoading(false));
     } catch (error) {
         console.log(error);
@@ -392,6 +393,7 @@ function* addCommentGeneratorPromise(
                 COMMENT_API.ADD,
                 addCommentData
             );
+            console.log(data);
             if (data.parentId) {
                 yield put(
                     getSubCommentsPromise({
@@ -400,7 +402,9 @@ function* addCommentGeneratorPromise(
                         type: 'add',
                     })
                 );
+                return;
             }
+            yield put(addCommentSuccess(data));
         } catch (error) {
             console.log(error);
             yield put(isCommentLoading(false));
@@ -439,10 +443,9 @@ function* deleteCommentGeneratorPromise(
             const { data }: AxiosResponse<IComment> = yield call(
                 apiSagaRequest,
                 'delete',
-                COMMENT_API.EDIT,
+                COMMENT_API.DELETE,
                 { data: deleteCommentData }
             );
-            console.log(data);
             yield put(deleteCommentSuccess(data));
             return data;
         } catch (error) {

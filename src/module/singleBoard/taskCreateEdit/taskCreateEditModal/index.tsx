@@ -43,7 +43,6 @@ function TaskCreateEditModal<T extends IAddTaskPayload | IEditTaskPayload>({
     title?: string;
     data: ITask | null;
 }) {
-    console.log(data);
     const { data: priorities } = useAppSelector(prioritiesSelector);
     const { isLoading: isBoardLoading, stagesSelect } =
         useAppSelector(boardSelectorState);

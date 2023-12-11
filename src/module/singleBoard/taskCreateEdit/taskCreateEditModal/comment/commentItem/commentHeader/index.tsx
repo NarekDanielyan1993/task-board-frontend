@@ -13,6 +13,7 @@ function CommentHeader({
     date: string;
     onDelete: (id: IDeleteCommentPayload) => void;
 }) {
+    console.log(id);
     return (
         <Flex alignItems="center" justifyContent="space-between">
             <Flex gap={2}>
