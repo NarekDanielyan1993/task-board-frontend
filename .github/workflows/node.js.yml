@@ -22,7 +22,8 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
-    - run: npm ci
+    - run: npm config set registry https://registry.npmjs.org/
+    - run: npm install
     - run: |
         touch .env
         echo "${{secrets.TASK_BOARD_SECRET_FRONTEND}}" > .env
