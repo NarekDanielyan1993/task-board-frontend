@@ -3,6 +3,7 @@
 import axios, { type AxiosRequestConfig } from 'axios';
 import { CANCEL } from 'redux-saga';
 import refresh from 'src/store/api/auth';
+import { logout } from 'src/store/auth/action';
 import { logInSuccess } from 'src/store/auth/reducer';
 import { store } from 'src/store/createStore';
 
@@ -31,6 +32,10 @@ axiosInstance.interceptors.response.use(
     (response) => response,
     async (error) => {
         const prevRequest = error.config;
+        if(!error.response) {
+            store.dispatch(logout());
+            window.location.href = `/auth/login`;
+        }
         if (
             [403, 401].includes(error?.response?.status) &&
             !prevRequest._retry
@@ -41,14 +46,13 @@ axiosInstance.interceptors.response.use(
             store.dispatch(logInSuccess(data));
             return axiosInstance(prevRequest);
         }
-        // if (
-        //     !error.response ||
-        //     (prevRequest._retry && [403, 401].includes(error?.response.status))
-        // ) {
-        //     prevRequest._retry = false;
-        //     store.dispatch(logout());
-        //     window.location.href = `/auth/login`;
-        // }
+        if (
+            (prevRequest._retry && [403, 401].includes(error?.response.status))
+        ) {
+            prevRequest._retry = false;
+            store.dispatch(logout());
+            window.location.href = `/auth/login`;
+        }
         return Promise.reject(error);
     }
 );
