@@ -4,11 +4,13 @@ import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import DotenvWebpackPlugin from 'dotenv-webpack';
-import 'dotenv/config';
 import path from 'path';
 import TerserPlugin from 'terser-webpack-plugin';
 import { merge } from 'webpack-merge';
+
 import common, { __dirname } from './webpack.config.js';
+
+('dotenv-webpack');
 
 const StatosCopePlugin = StatoscopeWebpackPlugin.default;
 
@@ -51,7 +53,10 @@ export default merge(common, {
             patterns: [{ from: 'public', to: 'public' }],
         }),
         new DotenvWebpackPlugin({
-            path: path.resolve('.env'),
+            systemvars: true,
+            safe: true,
+            allowEmptyValues: true,
+            path: path.resolve(__dirname, '.env'),
         }),
         new StatosCopePlugin({
             saveReportTo: './statsReports/report-[name]-[hash].html',
