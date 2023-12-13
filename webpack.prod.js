@@ -4,6 +4,7 @@ import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import DotenvWebpackPlugin from 'dotenv-webpack';
+import 'dotenv/config';
 import path from 'path';
 import TerserPlugin from 'terser-webpack-plugin';
 import { merge } from 'webpack-merge';
