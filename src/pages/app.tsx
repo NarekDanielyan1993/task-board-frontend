@@ -1,5 +1,4 @@
 import { ChakraProvider } from '@chakra-ui/react';
-import 'dotenv/config';
 import Notification from 'src/component/notification';
 import AuthRoute from 'src/component/route/authRoute';
 import MainRoute from 'src/component/route/mainRoute';

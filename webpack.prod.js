@@ -7,10 +7,7 @@ import DotenvWebpackPlugin from 'dotenv-webpack';
 import path from 'path';
 import TerserPlugin from 'terser-webpack-plugin';
 import { merge } from 'webpack-merge';
-
 import common, { __dirname } from './webpack.config.js';
-
-('dotenv-webpack');
 
 const StatosCopePlugin = StatoscopeWebpackPlugin.default;
 
