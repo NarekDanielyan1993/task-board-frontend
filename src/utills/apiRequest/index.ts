@@ -12,8 +12,6 @@ export const axiosInstance = axios.create({
     timeout: 30000,
 });
 
-console.log(process.env.SERVER_BASE_URL);
-
 axiosInstance.interceptors.request.use(
     (config) => {
         if (!config.headers.Authorization) {
