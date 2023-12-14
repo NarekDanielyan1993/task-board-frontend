@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { PayloadAction } from '@reduxjs/toolkit';
 import { implementPromiseAction } from '@teroneko/redux-saga-promise';
 import { AxiosResponse } from 'axios';
@@ -23,6 +24,7 @@ import {
 import { IBoard, IGetBoardPayload, IPriority } from 'src/types/board';
 import { IDropData } from 'src/types/dnd';
 import { apiSagaRequest } from 'src/utills/apiRequest';
+import { showNotification } from '../notification/reducer';
 import {
     ADD_COMMENT,
     ADD_STAGE,
@@ -90,6 +92,7 @@ function* getBoardGenerator(action: PayloadAction<IGetBoardPayload>) {
         yield put(getBoardSuccess(data));
     } catch (error) {
         console.log(error);
+        yield put(showNotification(error.message));
         yield put(getBoardFailure());
     }
 }
@@ -107,6 +110,7 @@ function* getStagesGenerator(action: PayloadAction<IGetBoardPayload>) {
         yield put(getStagesSuccess(data));
     } catch (error) {
         console.log(error);
+        yield put(showNotification(error.message));
         // yield put(getStagesFailure(error));
     }
 }
@@ -126,6 +130,7 @@ function* addStageGenerator(action: PayloadAction<IAddTaskPayload>) {
     } catch (error) {
         console.log(error);
         yield put(setIsStageLoading(false));
+        yield put(showNotification(error.message));
         // yield put(addBoardFailure(error));
     }
 }
@@ -141,6 +146,7 @@ function* deleteStageGenerator(action: PayloadAction<IDeleteStagePayload>) {
         yield put(setIsStageLoading(false));
     } catch (error) {
         console.log(error);
+        yield put(showNotification(error.message));
         yield put(setIsStageLoading(false));
         // yield put(addBoardFailure(error));
     }
@@ -150,14 +156,12 @@ function* getPrioritiesGenerator(action: PayloadAction<IGetBoardPayload>) {
     yield put(getPrioritiesInit());
     try {
         const { id } = action.payload;
-        console.log(id);
         const { data }: AxiosResponse<IPriority[]> = yield call(
             apiSagaRequest,
             'get',
             PRIORITY_API.GET_ALL,
             { params: { boardId: id } }
         );
-        console.log(data);
         yield put(getPrioritiesSuccess(data));
     } catch (error) {
         console.log(error);
@@ -197,9 +201,14 @@ function* addTaskGeneratorPromise(
             yield put(isBoardLoading(false));
             return data;
         } catch (error) {
-            console.log(error);
+            yield put(
+                showNotification({
+                    message: error?.response?.data?.message,
+                    type: 'error',
+                })
+            );
             yield put(isBoardLoading(false));
-            return Promise.reject(error);
+            // return Promise.reject(error);
         }
     });
 }
@@ -219,6 +228,12 @@ function* addTaskGenerator(action: PayloadAction<IAddTaskPayload>) {
     } catch (error) {
         console.log(error);
         yield put(isBoardLoading(false));
+        yield put(
+            showNotification({
+                message: error?.response?.data?.message,
+                type: 'error',
+            })
+        );
         // yield put(addBoardFailure(error));
     }
 }
@@ -243,6 +258,12 @@ function* editTaskGeneratorPromise(
         } catch (error) {
             console.log(error);
             yield put(isBoardLoading(false));
+            yield put(
+                showNotification({
+                    message: error?.response?.data?.message,
+                    type: 'error',
+                })
+            );
             return null;
             // yield put(addBoardFailure(error));
         }
@@ -265,6 +286,12 @@ function* editTaskGenerator(action: PayloadAction<IAddTaskPayload>) {
     } catch (error) {
         console.log(error);
         yield put(isBoardLoading(false));
+        yield put(
+            showNotification({
+                message: error?.response?.data?.message,
+                type: 'error',
+            })
+        );
         // yield put(addBoardFailure(error));
     }
 }
@@ -281,6 +308,12 @@ function* deleteTaskGenerator(action: PayloadAction<IDeleteTaskPayload>) {
     } catch (error) {
         console.log(error);
         yield put(isBoardLoading(false));
+        yield put(
+            showNotification({
+                message: error?.response?.data?.message,
+                type: 'error',
+            })
+        );
         // yield put(addBoardFailure(error));
     }
 }
@@ -302,7 +335,12 @@ function* searchTasksGenerator(action: PayloadAction<ISearchTasksPayload>) {
     } catch (error) {
         console.log(error);
         yield put(setIsSearchTasksLoading(false));
-        // yield put(addBoardFailure(error));
+        yield put(
+            showNotification({
+                message: error?.response?.data?.message,
+                type: 'error',
+            })
+        );
     }
 }
 
@@ -318,15 +356,10 @@ function* switchStageTaskGenerator(action: PayloadAction<IDropData>) {
         );
     } catch (error) {
         console.log(error);
-        // yield put(
-        //     switchTaskBetweenStages({
-        //         from: taskData.to,
-        //         to: taskData.from,
-        //         id: taskData.id,
-        //         destinationIndex: taskData.destinationIndex,
-        //         sourceIndex: taskData.sourceIndex,
-        //     })
-        // );
+        showNotification({
+            message: error?.response?.data?.message,
+            type: 'error',
+        });
     }
 }
 
@@ -345,7 +378,10 @@ function* addSubTaskGenerator(action: PayloadAction<IAddTaskPayload>) {
     } catch (error) {
         console.log(error);
         yield put(seIsSubTaskLoading(false));
-        // yield put(addBoardFailure(error));
+        showNotification({
+            message: error?.response?.data?.message,
+            type: 'error',
+        });
     }
 }
 
@@ -354,11 +390,15 @@ function* deleteSubTaskGenerator(action: PayloadAction<IDeleteSubTaskPayload>) {
     try {
         const deleteTaskData = action.payload;
         yield call(apiSagaRequest, 'delete', TASK_API.DELETE, {
-            data: { taskId: deleteTaskData.id },
+            data: { taskId: deleteTaskData._id },
         });
         yield put(deleteSubTaskSuccess(action.payload));
     } catch (error) {
         console.log(error);
+        showNotification({
+            message: error?.response?.data?.message,
+            type: 'error',
+        });
     }
     yield put(seIsSubTaskLoading(false));
 }
@@ -377,6 +417,10 @@ function* addCommentGenerator(action: PayloadAction<IAddTaskPayload>) {
         yield put(isCommentLoading(false));
     } catch (error) {
         console.log(error);
+        showNotification({
+            message: error?.response?.data?.message,
+            type: 'error',
+        });
         yield put(isCommentLoading(false));
     }
 }
@@ -407,6 +451,10 @@ function* addCommentGeneratorPromise(
             yield put(addCommentSuccess(data));
         } catch (error) {
             console.log(error);
+            showNotification({
+                message: error?.response?.data?.message,
+                type: 'error',
+            });
             yield put(isCommentLoading(false));
         }
     });
@@ -428,6 +476,10 @@ function* EditCommentGeneratorPromise(
             yield put(editCommentSuccess(data));
         } catch (error) {
             console.log(error);
+            showNotification({
+                message: error?.response?.data?.message,
+                type: 'error',
+            });
             yield put(isCommentLoading(false));
         }
     });
@@ -439,7 +491,6 @@ function* deleteCommentGeneratorPromise(
     yield call(implementPromiseAction, action, function* () {
         try {
             const deleteCommentData = action.payload;
-            console.log(deleteCommentData);
             const { data }: AxiosResponse<IComment> = yield call(
                 apiSagaRequest,
                 'delete',
@@ -450,6 +501,10 @@ function* deleteCommentGeneratorPromise(
             return data;
         } catch (error) {
             console.log(error);
+            showNotification({
+                message: error?.response?.data?.message,
+                type: 'error',
+            });
             yield put(isCommentLoading(false));
         }
         return null;
@@ -478,9 +533,11 @@ function* getSubCommentsGeneratorPromise(
             return subCommentData;
         } catch (error) {
             console.log(error);
-            // yield put(isCommentLoading(false));
+            showNotification({
+                message: error?.response?.data?.message,
+                type: 'error',
+            });
         }
-        // yield put(isCommentLoading(false));
         return null;
     });
 }
@@ -504,9 +561,11 @@ function* getSubCommentGenerator(action: PayloadAction<IGetSubCommentPayload>) {
         yield put(getSubCommentsSuccess(subCommentData));
     } catch (error) {
         console.log(error);
-        // yield put(isCommentLoading(false));
+        showNotification({
+            message: error?.response?.data?.message,
+            type: 'error',
+        });
     }
-    // yield put(isCommentLoading(false));
 }
 
 export default function* watchBoard() {

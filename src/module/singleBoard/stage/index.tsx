@@ -47,7 +47,6 @@ function StageContainer() {
         const { active, over } = event;
         const { id: activeId } = active;
         const { id: overId } = over;
-        console.log(45454);
         if (!over) {
             return;
         }

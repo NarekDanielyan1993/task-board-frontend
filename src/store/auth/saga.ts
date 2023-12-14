@@ -1,6 +1,5 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { AxiosResponse } from 'axios';
-import Cookies from 'js-cookie';
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { AUTH_API } from 'src/constant/api';
 import { NOTIFICATION_MESSAGES } from 'src/constant/notification';
@@ -150,10 +149,7 @@ function* updatePasswordGenerator(
 }
 
 function* logoutTokenGenerator() {
-    // yield put(refreshTokenInit());
     try {
-        Cookies.remove('isLoggedIn');
-        Cookies.remove('refreshToken');
         yield call(
             apiSagaRequest,
             'post',
@@ -163,10 +159,8 @@ function* logoutTokenGenerator() {
         );
         yield put(logoutSuccess());
     } catch (error) {
-        // yield put(refreshTokenFailed());
         console.log(error);
     }
-    // yield put(setIsAuthLoading(false));
 }
 
 export default function* watchAuth() {

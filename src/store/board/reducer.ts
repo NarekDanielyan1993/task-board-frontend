@@ -109,7 +109,7 @@ const boardSlice = createSlice({
             state.stages.isFetched = true;
             state.stages.isLoading = false;
             state.stagesSelect = action.payload.map((stage) => ({
-                value: stage.id,
+                value: stage._id,
                 label: stage.name,
             }));
         },
@@ -132,7 +132,7 @@ const boardSlice = createSlice({
             state.stages.data = newSortedStages;
             state.stagesSelect = newSortedStages.map((stage) => ({
                 label: stage.name,
-                value: stage.id,
+                value: stage._id,
             }));
         },
         deleteStageSuccess: (
@@ -140,12 +140,12 @@ const boardSlice = createSlice({
             action: PayloadAction<IDeleteStagePayload>
         ) => {
             const newStages = state.stages.data.filter(
-                (stage) => stage.id !== action.payload.id
+                (stage) => stage._id !== action.payload.id
             );
             state.stages.data = newStages;
             state.stagesSelect = newStages.map((stage) => ({
                 label: stage.name,
-                value: stage.id,
+                value: stage._id,
             }));
         },
         getPrioritiesInit: (state: IBoardState) => {
@@ -158,7 +158,7 @@ const boardSlice = createSlice({
             action: PayloadAction<IPriority[]>
         ) => {
             state.priorities.data = action.payload.map((priority) => ({
-                value: priority.id,
+                value: priority._id,
                 label: priority.name,
             }));
             state.priorities.isFetched = true;
@@ -200,7 +200,7 @@ const boardSlice = createSlice({
                         task.subTasks = [];
                     }
                     task.subTasks.push({
-                        id: action.payload.id,
+                        _id: action.payload._id,
                         summary: action.payload.summary,
                         stageId: action.payload.stageId,
                         parentId: action.payload.parentId,
@@ -216,8 +216,8 @@ const boardSlice = createSlice({
         },
         editTaskSuccess: (state: IBoardState, action: PayloadAction<ITask>) => {
             state.tasks.data = state.tasks.data.map((task) => {
-                if (task._id === action.payload._id) {
-                    return action.payload;
+                if (task._id === action.payload.id) {
+                    return { ...task, ...action.payload };
                 }
                 return task;
             });
@@ -225,13 +225,13 @@ const boardSlice = createSlice({
                 state.tasks.data = state.tasks.data.map((task) => {
                     if (task._id === action.payload.parentId) {
                         task.subTasks = task.subTasks.map((subtask) => {
-                            if (subtask.id === action.payload._id) {
-                                task.subTasks.push({
-                                    id: action.payload._id,
+                            if (subtask._id === action.payload.id) {
+                                return {
+                                    _id: action.payload.id,
                                     summary: action.payload.summary,
                                     stageId: action.payload.stageId,
                                     parentId: action.payload.parentId,
-                                });
+                                };
                             }
                             return subtask;
                         });
@@ -244,16 +244,34 @@ const boardSlice = createSlice({
             state: IBoardState,
             action: PayloadAction<IDeleteTaskPayload>
         ) => {
-            state.tasks.data = state.tasks.data.filter(
-                (task) => task._id !== action.payload.id
-            );
+            state.tasks.data = state.tasks.data.filter((task) => {
+                return task._id !== action.payload.id;
+            });
             if (action.payload.parentId) {
                 state.tasks.data = state.tasks.data.map((task) => {
                     if (task._id === action.payload.parentId) {
                         task.subTasks = task.subTasks.filter(
-                            (task) => task.id !== action.payload.id
+                            (task) => task._id !== action.payload.id
                         );
                         return task;
+                    }
+                    return task;
+                });
+            }
+        },
+        deleteSubTaskSuccess: (
+            state: IBoardState,
+            action: PayloadAction<IDeleteSubTaskPayload>
+        ) => {
+            state.tasks.data = state.tasks.data.filter((task) => {
+                return task._id !== action.payload._id;
+            });
+            if (action.payload.parentId) {
+                state.tasks.data = state.tasks.data.map((task) => {
+                    if (task._id === action.payload.parentId) {
+                        task.subTasks = task.subTasks.filter(
+                            (subtask) => subtask._id !== action.payload._id
+                        );
                     }
                     return task;
                 });
@@ -316,24 +334,6 @@ const boardSlice = createSlice({
                 );
             }
         },
-        deleteSubTaskSuccess: (
-            state: IBoardState,
-            action: PayloadAction<IDeleteSubTaskPayload>
-        ) => {
-            state.tasks.data = state.tasks.data.filter((task) => {
-                return task._id === action.payload.id;
-            });
-            if (action.payload.parentId) {
-                state.tasks.data = state.tasks.data.map((task) => {
-                    if (task._id === action.payload.parentId) {
-                        task.subTasks.filter(
-                            (subtask) => subtask.id !== action.payload.id
-                        );
-                    }
-                    return task;
-                });
-            }
-        },
         isCommentLoading: (
             state: IBoardState,
             action: PayloadAction<boolean>
@@ -344,7 +344,6 @@ const boardSlice = createSlice({
             state: IBoardState,
             action: PayloadAction<IComment>
         ) => {
-            console.log(action.payload);
             state.tasks.data = state.tasks.data.map((task) => {
                 if (task._id === action.payload.taskId) {
                     task.comments = task.comments.concat(action.payload);
@@ -374,7 +373,7 @@ const boardSlice = createSlice({
                 if (task._id === action.payload.taskId) {
                     task.comments = findCommentAndRemove(
                         task.comments,
-                        action.payload.id
+                        action.payload._id
                     );
                 }
                 return task;

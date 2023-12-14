@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { Box, Flex, Text } from '@chakra-ui/react';
 import { useCallback } from 'react';
 import Loader from 'src/component/loader';
@@ -35,7 +36,7 @@ function CommentItem({ comment }: { comment: IComment }) {
                     setIsLoading(true);
                     console.log('comment', comment);
                     getSubCommentsHandler({
-                        parentId: comment._id || comment.id,
+                        parentId: comment._id,
                         taskId: comment.taskId,
                         type: 'get',
                     })
@@ -58,7 +59,7 @@ function CommentItem({ comment }: { comment: IComment }) {
             addCommentHandlerPromise({
                 taskId: comment.taskId,
                 text: data.text,
-                parentId: comment.id,
+                parentId: comment._id,
             })
                 .then()
                 .finally(() => setIsLoading(false));
@@ -70,7 +71,7 @@ function CommentItem({ comment }: { comment: IComment }) {
         setIsLoading(true);
         editCommentHandler({
             taskId: comment.taskId,
-            id: comment.id,
+            id: comment._id,
             text: data.text,
         })
             .then()
@@ -101,7 +102,7 @@ function CommentItem({ comment }: { comment: IComment }) {
                 <CommentHeader
                     date={comment.date}
                     // eslint-disable-next-line no-underscore-dangle
-                    id={comment._id || comment.id}
+                    id={comment._id}
                     name={comment.author}
                     onDelete={onDeleteCommentHandler}
                 />

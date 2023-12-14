@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable camelcase */
 import { Box, Flex, Text } from '@chakra-ui/react';
 import { useSortable } from '@dnd-kit/sortable';
@@ -29,7 +30,6 @@ function StageItem({ task }: { task: ITask }) {
         taskNumber,
         attachments,
         priorityId: taskPriorityId,
-        _id,
         parentId,
     } = task;
 
@@ -43,7 +43,7 @@ function StageItem({ task }: { task: ITask }) {
 
     const { attributes, listeners, setNodeRef, transform, transition } =
         useSortable({
-            id: _id,
+            id: task._id,
             data: { type: 'Task', task },
             transition: {
                 duration: 500,
@@ -113,7 +113,7 @@ function StageItem({ task }: { task: ITask }) {
                         <ConfirmationModal
                             actionFn={() =>
                                 deleteTaskHandler({
-                                    id: _id,
+                                    id: task._id,
                                     parentId,
                                 })
                             }

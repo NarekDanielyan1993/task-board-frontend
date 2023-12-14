@@ -1,7 +1,7 @@
 import { ADD_STAGE, DELETE_STAGE, GET_STAGES } from 'src/store/board/action';
 
 export interface IStage {
-    id: string;
+    _id: string;
     name: string;
     color: string;
     listPosition: number;

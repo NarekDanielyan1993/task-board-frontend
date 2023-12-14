@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable no-restricted-syntax */
 import { IComment } from 'src/types';
 
@@ -13,7 +14,7 @@ export function addCommentsToTask(
         return updatedComments;
     }
     return comments.map((comment) => {
-        if (comment._id === parentId || comment.id === parentId) {
+        if (comment._id === parentId) {
             if (!comment.comments) {
                 comment.comments = [];
             }
@@ -39,7 +40,7 @@ export function findCommentAndUpdate(
     commentData: IComment
 ) {
     return comments.map((comment) => {
-        if (comment.id === commentData.id) {
+        if (comment._id === commentData._id) {
             comment = { ...comment, ...commentData };
         } else if (
             Array.isArray(comment.comments) &&
@@ -60,7 +61,7 @@ export function findCommentAndRemove(
 ): IComment[] {
     const updatedComments = comments.reduce((acc, comment) => {
         // eslint-disable-next-line no-underscore-dangle
-        if (comment._id === commentId || comment.id === commentId) {
+        if (comment._id === commentId) {
             return acc;
         }
 

@@ -11,15 +11,15 @@ import StageItem from '../stageItem';
 
 function StageItemList({ stage, tasks }: { tasks: ITask[]; stage: IStage }) {
     const { setNodeRef } = useDroppable({
-        id: stage.id,
+        id: stage._id,
         data: { type: 'Column' },
     });
 
     return (
         <SortableContext
-            id={stage.id}
+            id={stage._id}
             items={tasks.map((task) => task._id)}
-            key={stage.id}
+            key={stage._id}
             strategy={verticalListSortingStrategy}
         >
             <Stack

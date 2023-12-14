@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { CheckCircleIcon } from '@chakra-ui/icons';
 import { ListIcon, ListItem } from '@chakra-ui/react';
 // import CheckCircle from 'public/assets/check-circle.svg';
@@ -27,7 +28,7 @@ function SubTaskItem({
                 onClick={() =>
                     onDelete({
                         parentId: subtask.parentId,
-                        id: subtask.id,
+                        _id: subtask._id,
                         stageId: subtask.stageId,
                     })
                 }

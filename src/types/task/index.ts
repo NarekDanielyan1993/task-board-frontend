@@ -23,7 +23,7 @@ export interface IAttachment {
 }
 
 export interface IComment {
-    id: string;
+    _id: string;
     text: string;
     author: string;
     date: string;
@@ -35,7 +35,7 @@ export interface IComment {
 
 export interface ISubTask {
     summary: string;
-    id: string;
+    _id: string;
     stageId: string;
     parentId: string;
 }
@@ -190,7 +190,7 @@ export interface IAddSubTaskAction {
 }
 
 export interface IDeleteSubTaskPayload {
-    id: string;
+    _id: string;
     stageId: string;
     parentId: string;
 }

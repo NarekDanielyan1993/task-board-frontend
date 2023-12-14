@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { Flex } from '@chakra-ui/react';
 import { IComment } from 'src/types';
 import CommentItem from '../commentItem';
@@ -7,7 +8,7 @@ function CommentList({ comments }: { comments: IComment[] }) {
         <Flex flexDir="column" flexGrow={1} gap={4} pos="relative">
             {Array.isArray(comments) &&
                 comments.map((comment) => {
-                    return <CommentItem comment={comment} key={comment.id} />;
+                    return <CommentItem comment={comment} key={comment._id} />;
                 })}
         </Flex>
     );

@@ -1,16 +1,20 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-param-reassign */
 import axios, { type AxiosRequestConfig } from 'axios';
+import Cookies from 'js-cookie';
 import { CANCEL } from 'redux-saga';
 import refresh from 'src/store/api/auth';
 import { logout } from 'src/store/auth/action';
 import { logInSuccess } from 'src/store/auth/reducer';
 import { store } from 'src/store/createStore';
+import config from '../config';
 
 export const axiosInstance = axios.create({
     baseURL: process.env.SERVER_BASE_URL as string,
     timeout: 30000,
 });
+
+console.log(config.CLIENT_BASE_URL);
 
 axiosInstance.interceptors.request.use(
     (config) => {
@@ -30,8 +34,9 @@ axiosInstance.interceptors.response.use(
     async (error) => {
         const prevRequest = error.config;
         if (!error.response) {
-            store.dispatch(logout());
+            Cookies.remove('isLoggedIn');
             window.location.href = `/auth/login`;
+            return Promise.reject(error);
         }
         if (
             [403, 401].includes(error?.response?.status) &&
@@ -45,6 +50,7 @@ axiosInstance.interceptors.response.use(
         }
         if (prevRequest._retry && [403, 401].includes(error?.response.status)) {
             prevRequest._retry = false;
+            Cookies.remove('isLoggedIn');
             store.dispatch(logout());
             window.location.href = `/auth/login`;
         }

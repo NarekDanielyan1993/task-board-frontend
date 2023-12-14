@@ -3,12 +3,12 @@ import { GET_BOARD, GET_PRIORITIES, GET_STAGES } from 'src/store/board/action';
 import { ISelectProps, IStage, ITask } from '..';
 
 export interface IBoard {
-    id: string;
+    _id: string;
     name: string;
 }
 
 export interface IPriority {
-    id: string;
+    _id: string;
     name: string;
 }
 
