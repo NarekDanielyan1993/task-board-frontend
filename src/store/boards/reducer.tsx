@@ -51,7 +51,8 @@ const boardsSlice = createSlice({
             action: PayloadAction<string>
         ) => {
             state.boards.data = state.boards.data.filter(
-                (item: IBoard) => item.id !== action.payload
+                // eslint-disable-next-line no-underscore-dangle
+                (item: IBoard) => item._id !== action.payload
             );
         },
     },

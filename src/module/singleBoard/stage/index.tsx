@@ -31,7 +31,7 @@ function StageContainer() {
 
     const { isStageLoading } = useAppSelector(boardSelectorState);
     const { data: tasks } = useAppSelector(tasksSelector);
-    console.log(tasks);
+
     const [activeTask, setActiveTask] = useState<ITask | undefined>(undefined);
     const dispatch = useDispatch();
 
@@ -81,45 +81,6 @@ function StageContainer() {
                 })
             );
         }
-        // if (isActiveTask && isOverTask) {
-        //     setTasks((tasks) => {
-        //         const activeIndex = tasks.findIndex(
-        //             (t) => t._id === activeTaskId
-        //         );
-        //         const overIndex = tasks.findIndex((t) => t._id === overTaskId);
-        //         const newTasks = tasks.map((task, index) => {
-        //             if (index === activeIndex) {
-        //                 return {
-        //                     ...task,
-        //                     stageId: tasks[overIndex].stageId,
-        //                 };
-        //             }
-        //             return task;
-        //         });
-        //         return arrayMove(newTasks, activeIndex, overIndex);
-        //     });
-        // }
-
-        // const isOverAColumn = over.data.current?.type === 'Column';
-
-        // if (isActiveTask && isOverAColumn) {
-        //     setTasks((tasks) => {
-        //         const activeIndex = tasks.findIndex(
-        //             (t) => t._id === activeTaskId
-        //         );
-        //         const newTasks = tasks.map((task, index) => {
-        //             if (index === activeIndex) {
-        //                 return {
-        //                     ...task,
-        //                     stageId: overTaskId,
-        //                 };
-        //             }
-        //             return task;
-        //         });
-
-        //         return arrayMove(newTasks, activeIndex, activeIndex);
-        //     });
-        // }
     };
 
     const handleDragEnd = (event: DragEndEvent) => {
@@ -153,7 +114,7 @@ function StageContainer() {
                 onDragOver={handleDragOver}
                 onDragStart={handleDragStart}
             >
-                <StageList tasks={tasks} />
+                <StageList />
                 {activeTask ? (
                     <DragOverlay>
                         <StageItem task={activeTask} />

@@ -308,6 +308,7 @@ const boardSlice = createSlice({
                     }
                     return task;
                 });
+
                 state.tasks.data = arrayMove(
                     state.tasks.data,
                     sourceIndex,
@@ -346,6 +347,9 @@ const boardSlice = createSlice({
         ) => {
             state.tasks.data = state.tasks.data.map((task) => {
                 if (task._id === action.payload.taskId) {
+                    if (!task.comments) {
+                        task.comments = [];
+                    }
                     task.comments = task.comments.concat(action.payload);
                 }
                 return task;
