@@ -4,9 +4,7 @@ import { AUTH_API } from 'src/constant';
 
 function ThirdPartySignIn() {
     const googleLogin = () => {
-        window.location.href = `${'http://localhost:5000/api'}${
-            AUTH_API.LOGIN_GOOGLE
-        }`;
+        window.location.href = `${process.env.SERVER_BASE_URL}${AUTH_API.LOGIN_GOOGLE}`;
     };
 
     return (

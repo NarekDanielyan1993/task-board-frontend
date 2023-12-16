@@ -92,7 +92,7 @@ function* getBoardGenerator(action: PayloadAction<IGetBoardPayload>) {
         yield put(getBoardSuccess(data));
     } catch (error) {
         console.log(error);
-        yield put(showNotification(error.message));
+        yield put(showNotification(error?.response?.data?.message));
         yield put(getBoardFailure());
     }
 }
@@ -110,7 +110,7 @@ function* getStagesGenerator(action: PayloadAction<IGetBoardPayload>) {
         yield put(getStagesSuccess(data));
     } catch (error) {
         console.log(error);
-        yield put(showNotification(error.message));
+        yield put(showNotification(error?.response?.data?.message));
         // yield put(getStagesFailure(error));
     }
 }
@@ -130,7 +130,7 @@ function* addStageGenerator(action: PayloadAction<IAddTaskPayload>) {
     } catch (error) {
         console.log(error);
         yield put(setIsStageLoading(false));
-        yield put(showNotification(error.message));
+        yield put(showNotification(error?.response?.data?.message));
         // yield put(addBoardFailure(error));
     }
 }
@@ -146,7 +146,7 @@ function* deleteStageGenerator(action: PayloadAction<IDeleteStagePayload>) {
         yield put(setIsStageLoading(false));
     } catch (error) {
         console.log(error);
-        yield put(showNotification(error.message));
+        yield put(showNotification(error?.response?.data?.message));
         yield put(setIsStageLoading(false));
         // yield put(addBoardFailure(error));
     }

@@ -7,6 +7,7 @@ import StageColumn from './stageColumn';
 function StageList() {
     const { data: stages } = useAppSelector(stagesSelector);
     const { data: tasks } = useAppSelector(tasksSelector);
+
     return stages?.map((stage: IStage) => {
         return <StageColumn key={stage._id} stage={stage} tasks={tasks} />;
     });

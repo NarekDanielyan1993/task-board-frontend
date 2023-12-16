@@ -288,6 +288,7 @@ const boardSlice = createSlice({
             action: PayloadAction<IDndTask>
         ) => {
             const { sourceId, destinationId, type } = action.payload;
+
             console.log(sourceId);
             console.log(destinationId);
 
@@ -295,9 +296,13 @@ const boardSlice = createSlice({
                 const sourceIndex = state.tasks.data.findIndex(
                     (t) => t._id === sourceId
                 );
+
                 const destinationIndex = state.tasks.data.findIndex(
                     (t) => t._id === destinationId
                 );
+
+                console.log(sourceIndex);
+                console.log(destinationIndex);
 
                 state.tasks.data = state.tasks.data.map((task, index) => {
                     if (index === sourceIndex) {
@@ -315,6 +320,7 @@ const boardSlice = createSlice({
                     destinationIndex
                 );
             }
+
             if (type === 'stage') {
                 const sourceIndex = state.tasks.data.findIndex(
                     (t) => t._id === sourceId
