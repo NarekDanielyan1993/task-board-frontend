@@ -70,7 +70,7 @@ export default {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: './public/index.html',
+            template: 'index.html',
         }),
         new MiniCssExtractPlugin({
             filename: 'style.[contenthash].js',
