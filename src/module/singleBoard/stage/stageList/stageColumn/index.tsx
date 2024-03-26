@@ -1,25 +1,26 @@
 /* eslint-disable no-underscore-dangle */
+import { useDroppable } from '@dnd-kit/core';
+import StageItemList from 'src/module/singleBoard/stage/stageList/stageColumn/stageItemList';
 import { useBoardContext } from 'src/pages/board/context';
 import { IStage, ITask } from 'src/types';
 import StageColumnHeader from './stageColumnHeader';
-import StageItemList from './stageItemList';
 import StyledStageColumn from './style';
 
 function StageColumn({ stage, tasks }: { tasks: ITask[]; stage: IStage }) {
     const { deleteStageHandler } = useBoardContext();
-    const stageTasks = tasks.filter((task) => task.stageId === stage._id);
-
+    const { setNodeRef } = useDroppable({
+        id: stage._id,
+    });
     return (
-        <StyledStageColumn>
+        <StyledStageColumn ref={setNodeRef}>
             <StageColumnHeader
                 color={stage.color}
                 onDelete={() => deleteStageHandler({ id: stage._id })}
-                tasksCount={stageTasks.length}
+                tasksCount={tasks.length}
             >
                 {stage.name}
             </StageColumnHeader>
-
-            <StageItemList stage={stage} tasks={stageTasks} />
+            <StageItemList tasks={tasks} />
         </StyledStageColumn>
     );
 }

@@ -53,6 +53,9 @@
       "src/*": ["./src/*"],
     }
   },
-  "include": ["src/**/*"],
+  "include": [
+    "src/**/*",
+    "jest.setup.js"
+  ],
   "exclude": ["node_modules"]
 }

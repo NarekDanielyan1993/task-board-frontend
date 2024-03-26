@@ -81,15 +81,12 @@ const useForm = <T extends FieldValues>({
         shouldUnregister: true,
         reValidateMode: 'onChange',
         ...(validationSchema && {
-            // resolver: customResolver,
             resolver: zodResolver(validationSchema),
         }),
         defaultValues,
     });
 
     console.log('formState.errors', formState.errors);
-    console.log('formState.dirty', formState.dirtyFields);
-    console.log('formState.dirty', formState.isValid);
     function FormField({
         name,
         label = '',

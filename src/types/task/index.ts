@@ -68,6 +68,7 @@ export interface ITask {
     due_date: string;
     priorityId: string;
     stageId: string;
+    position: number;
     parentId: string;
     comments: IComment[];
     attachments: IAttachment[];
@@ -139,6 +140,19 @@ export interface IEditTaskPayload extends Partial<IAddTaskPayload> {
     removedAttachments?: IAttachment[];
     appendAttachments?: IAttachment[];
     id: string;
+}
+
+export interface IReorderTask {
+    id: string;
+    data: { position: number; stageId?: string };
+}
+
+export interface IDraggingTask extends ITask {
+    startIndex: number;
+}
+
+export interface IEditTasksPayload {
+    taskData: IReorderTask[];
 }
 
 export interface IEditTaskAction {

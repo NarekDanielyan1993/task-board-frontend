@@ -1,5 +1,13 @@
-import { Box, FormControl, FormLabel, Input, chakra } from '@chakra-ui/react';
+import {
+    Box,
+    FormControl,
+    FormLabel,
+    Input,
+    // Select,
+    chakra,
+} from '@chakra-ui/react';
 import Select from 'react-select';
+// import { Select } from 'chakra-react-select';
 
 export const StyledInput = chakra(Input, {
     baseStyle: {

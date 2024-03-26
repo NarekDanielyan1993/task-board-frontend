@@ -3,7 +3,7 @@ import { Stack, chakra } from '@chakra-ui/react';
 const StyledStageColumn = chakra(Stack, {
     baseStyle: {
         position: 'relative',
-        w: { base: 'full', lg: 'xs' },
+        w: 'xs',
         padding: 2,
         flexShrink: 0,
         flexGrow: 0,

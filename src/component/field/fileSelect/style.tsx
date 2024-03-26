@@ -2,20 +2,18 @@ import { Text, chakra } from '@chakra-ui/react';
 
 export const StyledFileSelect = chakra('div', {
     baseStyle: {
-        width: 'full',
-        height: 24,
-        py: 2,
         display: 'flex',
-        textAlign: 'center',
-        justifyContent: 'center',
+        width: '100%',
         alignItems: 'center',
-        flexDir: 'column',
-        alignContent: 'center',
-        color: 'brand.secondary.main',
-        bgColor: 'brand.background.main',
-        fontSize: 'md',
-        borderRadius: 4,
+        justifyContent: 'center',
+        padding: 2,
+        backgroundColor: 'brand.secondary.main',
+        color: '#fff',
+        borderRadius: 'md',
         cursor: 'pointer',
+        transition: 'background-color 0.3s',
+        border: 'none',
+        outline: 'none',
     },
 });
 

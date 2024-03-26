@@ -8,10 +8,12 @@ import {
 } from '@chakra-ui/react';
 import { useCallback, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
-import Loader from 'src/component/loader';
 import ModalWrapper from 'src/component/modalWrapper';
 import useForm from 'src/hooks/useForm';
-import { IAddStagePayload } from 'src/types';
+import { stagesSelector } from 'src/store/board/selector';
+import { useAppSelector } from 'src/store/createStore';
+import { IAddStagePayload, IUpdatedStagePosition } from 'src/types';
+import { isArrayEmpty } from 'src/utills/helper';
 import {
     AddStageValidationType,
     addStageValidationSchema,
@@ -22,32 +24,64 @@ function StageModalCreate({
     onClose,
     title,
     onSubmit,
-    isLoading = false,
 }: {
     isOpen: boolean;
     onClose: () => void;
     onSubmit: (data: IAddStagePayload) => void;
     title: string;
-    isLoading?: boolean;
 }) {
     const { id } = useParams();
+    const { data: stages } = useAppSelector(stagesSelector);
+
+    const stagesData = stages.map((stage, index) => ({
+        value: stage._id,
+        label: stage.listPosition,
+        index,
+    }));
+
     const defaultValues = useMemo(() => {
         return {
             name: '',
-            listPosition: '',
+            listPosition: !isArrayEmpty(stages)
+                ? {
+                      value: stages[0]._id,
+                      label: stages[0].listPosition,
+                      index: 0,
+                  }
+                : {},
             color: 'green',
+            lastPosition: false,
         };
     }, []);
 
-    const { FormField, handleSubmit } = useForm<AddStageValidationType>({
+    const { FormField, handleSubmit, watch } = useForm<AddStageValidationType>({
         defaultValues,
         validationSchema: addStageValidationSchema,
     });
 
+    const lastPosition = watch('lastPosition');
+
     const formSubmitHandler = useCallback(
         (formData: AddStageValidationType) => {
-            console.log('formData', formData);
-            const stageData = { ...formData, boardId: id } as IAddStagePayload;
+            const stageData = {} as IAddStagePayload;
+            stageData.name = formData.name;
+            stageData.color = formData.color;
+            stageData.boardId = id as string;
+            stageData.listPosition = formData.listPosition.label;
+            if (formData.lastPosition) {
+                stageData.listPosition = stagesData.length + 1;
+                stageData.updatedStagePositions = null;
+            } else {
+                stageData.updatedStagePositions = stages.reduce(
+                    (acc, stage, index) => {
+                        if (index >= formData.listPosition.index) {
+                            acc.push({ id: stage._id, position: index + 2 });
+                        }
+                        return acc;
+                    },
+                    [] as IUpdatedStagePosition[]
+                );
+            }
             onSubmit(stageData);
         },
         []
@@ -55,14 +89,13 @@ function StageModalCreate({
 
     return (
         <ModalWrapper isOpen={isOpen} onClose={onClose} size="xl">
-            {isLoading ? <Loader /> : null}
             <ModalHeader>{title}</ModalHeader>
             <ModalBody>
                 <form
                     id="create-stage-form"
                     onSubmit={handleSubmit(formSubmitHandler)}
                 >
-                    <SimpleGrid columns={4} spacing={2}>
+                    <SimpleGrid alignItems="center" columns={4} spacing={2}>
                         <GridItem colSpan={4}>
                             {FormField({
                                 name: 'name',
@@ -76,11 +109,19 @@ function StageModalCreate({
                                 label: 'Select color',
                             })}
                         </GridItem>
-                        <GridItem colSpan={2}>
+                        <GridItem colSpan={1}>
+                            {FormField({
+                                name: 'lastPosition',
+                                type: 'checkbox',
+                                label: 'Last position',
+                            })}
+                        </GridItem>
+                        <GridItem colSpan={1}>
                             {FormField({
                                 name: 'listPosition',
-                                type: 'number',
-                                label: 'Select position',
+                                type: 'select',
+                                disabled: lastPosition,
+                                options: stagesData,
                             })}
                         </GridItem>
                     </SimpleGrid>

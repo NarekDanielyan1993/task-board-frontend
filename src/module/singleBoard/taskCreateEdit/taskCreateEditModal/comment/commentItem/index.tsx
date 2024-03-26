@@ -83,7 +83,6 @@ function CommentItem({ comment }: { comment: IComment }) {
 
     const onDeleteCommentHandler = useCallback(
         (data: IDeleteCommentPayload) => {
-            console.log('data', data);
             setIsLoading(true);
             deleteCommentHandler({
                 id: data.id,

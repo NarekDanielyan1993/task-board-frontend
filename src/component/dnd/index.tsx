@@ -5,8 +5,7 @@ import {
     DragStartEvent,
     KeyboardSensor,
     MouseSensor,
-    PointerSensor,
-    closestCorners,
+    TouchSensor,
     useSensor,
     useSensors,
 } from '@dnd-kit/core';
@@ -26,23 +25,24 @@ function Dnd({
 }) {
     const sensors = useSensors(
         useSensor(MouseSensor, {
-            activationConstraint: { distance: 3 },
+            activationConstraint: {
+                distance: 5,
+            },
         }),
-        useSensor(PointerSensor, {
-            activationConstraint: { distance: 3 },
+        useSensor(TouchSensor, {
+            activationConstraint: {
+                delay: 250,
+                tolerance: 5,
+            },
         }),
         useSensor(KeyboardSensor, {
             coordinateGetter: sortableKeyboardCoordinates,
         })
     );
+
     return (
         <DndContext
-            collisionDetection={closestCorners}
-            // measuring={{
-            //     droppable: {
-            //         strategy: MeasuringStrategy.Always,
-            //     },
-            // }}
+            // collisionDetection={closestCorners}
             onDragEnd={onDragEnd}
             onDragOver={onDragOver}
             onDragStart={onDragStart}

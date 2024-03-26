@@ -1,6 +1,5 @@
 import { Button, Collapse, Flex } from '@chakra-ui/react';
 import { useCallback } from 'react';
-import Loader from 'src/component/loader';
 import useForm from 'src/hooks/useForm';
 import useToggle from 'src/hooks/useToggle';
 import { useBoardContext } from 'src/pages/board/context';
@@ -24,7 +23,6 @@ function SubTaskForm({ taskId, stageId }: { taskId: string; stageId: string }) {
     });
 
     const formSubmitHandler = useCallback((formData: addSubtaskFormType) => {
-        console.log(taskId);
         addSubTaskHandler({
             summary: formData.summary,
             parentId: taskId,
@@ -35,7 +33,6 @@ function SubTaskForm({ taskId, stageId }: { taskId: string; stageId: string }) {
 
     return (
         <>
-            {isLoading ? <Loader /> : null}
             <Button onClick={() => toggle()} variant="ghost">
                 Create sub task
             </Button>
@@ -53,7 +50,11 @@ function SubTaskForm({ taskId, stageId }: { taskId: string; stageId: string }) {
                         name: 'summary',
                         label: 'Summary',
                     })}
-                    <Button type="submit" variant="primary">
+                    <Button
+                        isLoading={isLoading}
+                        type="submit"
+                        variant="primary"
+                    >
                         Create
                     </Button>
                 </Flex>

@@ -41,11 +41,12 @@ function TaskCreateEditModal<T extends IAddTaskPayload | IEditTaskPayload>({
     onClose: () => void;
     onSubmit: (taskData: T) => void;
     title?: string;
-    data: ITask | null;
+    data?: ITask | null;
 }) {
     const { data: priorities } = useAppSelector(prioritiesSelector);
     const { isLoading: isBoardLoading, stagesSelect } =
         useAppSelector(boardSelectorState);
+    console.log(data);
     const defaultValues = useMemo(() => {
         if (data) {
             const priority = priorities.find(
@@ -126,7 +127,6 @@ function TaskCreateEditModal<T extends IAddTaskPayload | IEditTaskPayload>({
     );
 
     const formSubmitHandler = useCallback((formData: IAddEditTask) => {
-        console.log('formData', formData);
         const taskData = {} as T;
         if (formData.stageId) {
             taskData.stageId = formData.stageId.value;

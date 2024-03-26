@@ -3,9 +3,8 @@ import { Box, chakra } from '@chakra-ui/react';
 export const StyledStageItemWrapper = chakra(Box, {
     baseStyle: {
         position: 'relative',
-        w: '18rem',
-        flexShrink: 0,
-        flexGrow: 0,
+        maxW: '18rem',
+        w: '100%',
         p: 2,
         mx: 'auto',
         fontSize: 'md',

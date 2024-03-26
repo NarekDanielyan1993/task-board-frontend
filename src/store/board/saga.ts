@@ -10,6 +10,7 @@ import BOARD_API, {
     TASK_API,
 } from 'src/constant/api';
 import {
+    IAddStagePayload,
     IAddTaskPayload,
     IComment,
     IDeleteStagePayload,
@@ -46,15 +47,15 @@ import {
     deleteCommentPromise,
     editCommentPromise,
     editTaskPromise,
+    editTasksPromise,
+    getStages,
     getSubCommentsPromise,
 } from './action';
 import {
     addCommentSuccess,
-    addStageSuccess,
     addSubTaskSuccess,
     addTaskSuccess,
     deleteCommentSuccess,
-    deleteStageSuccess,
     deleteSubTaskSuccess,
     deleteTaskSuccess,
     editCommentSuccess,
@@ -90,7 +91,7 @@ function* getBoardGenerator(action: PayloadAction<IGetBoardPayload>) {
             { withCredentials: true }
         );
         yield put(getBoardSuccess(data));
-    } catch (error) {
+    } catch (error: any) {
         console.log(error);
         yield put(showNotification(error?.response?.data?.message));
         yield put(getBoardFailure());
@@ -108,14 +109,14 @@ function* getStagesGenerator(action: PayloadAction<IGetBoardPayload>) {
             { params: { id } }
         );
         yield put(getStagesSuccess(data));
-    } catch (error) {
+    } catch (error: any) {
         console.log(error);
         yield put(showNotification(error?.response?.data?.message));
         // yield put(getStagesFailure(error));
     }
 }
 
-function* addStageGenerator(action: PayloadAction<IAddTaskPayload>) {
+function* addStageGenerator(action: PayloadAction<IAddStagePayload>) {
     yield put(setIsStageLoading(true));
     try {
         const addStageData = action.payload;
@@ -125,13 +126,12 @@ function* addStageGenerator(action: PayloadAction<IAddTaskPayload>) {
             STAGE_API.ADD,
             addStageData
         );
-        yield put(addStageSuccess(data));
         yield put(setIsStageLoading(false));
-    } catch (error) {
+        yield put(getStages({ id: addStageData.boardId }));
+    } catch (error: any) {
         console.log(error);
         yield put(setIsStageLoading(false));
         yield put(showNotification(error?.response?.data?.message));
-        // yield put(addBoardFailure(error));
     }
 }
 
@@ -139,16 +139,20 @@ function* deleteStageGenerator(action: PayloadAction<IDeleteStagePayload>) {
     yield put(setIsStageLoading(true));
     try {
         const deleteStageData = action.payload;
-        yield call(apiSagaRequest, 'delete', STAGE_API.REMOVE, {
-            data: { id: deleteStageData.id },
-        });
-        yield put(deleteStageSuccess(deleteStageData));
+        const { data }: AxiosResponse<IStage> = yield call(
+            apiSagaRequest,
+            'delete',
+            STAGE_API.REMOVE,
+            {
+                data: { id: deleteStageData.id },
+            }
+        );
+        yield put(getStages({ id: data.boardId }));
         yield put(setIsStageLoading(false));
-    } catch (error) {
+    } catch (error: any) {
         console.log(error);
         yield put(showNotification(error?.response?.data?.message));
         yield put(setIsStageLoading(false));
-        // yield put(addBoardFailure(error));
     }
 }
 
@@ -200,7 +204,7 @@ function* addTaskGeneratorPromise(
             yield put(addTaskSuccess(data));
             yield put(isBoardLoading(false));
             return data;
-        } catch (error) {
+        } catch (error: any) {
             yield put(
                 showNotification({
                     message: error?.response?.data?.message,
@@ -208,7 +212,6 @@ function* addTaskGeneratorPromise(
                 })
             );
             yield put(isBoardLoading(false));
-            // return Promise.reject(error);
         }
     });
 }
@@ -225,7 +228,7 @@ function* addTaskGenerator(action: PayloadAction<IAddTaskPayload>) {
         );
         yield put(addTaskSuccess(data));
         yield put(isBoardLoading(false));
-    } catch (error) {
+    } catch (error: any) {
         console.log(error);
         yield put(isBoardLoading(false));
         yield put(
@@ -234,7 +237,6 @@ function* addTaskGenerator(action: PayloadAction<IAddTaskPayload>) {
                 type: 'error',
             })
         );
-        // yield put(addBoardFailure(error));
     }
 }
 
@@ -255,7 +257,7 @@ function* editTaskGeneratorPromise(
             yield put(editTaskSuccess(data));
             yield put(isBoardLoading(false));
             return data;
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
             yield put(isBoardLoading(false));
             yield put(
@@ -265,7 +267,35 @@ function* editTaskGeneratorPromise(
                 })
             );
             return null;
-            // yield put(addBoardFailure(error));
+        }
+    });
+}
+
+function* editTasksGeneratorPromise(
+    action: typeof editTasksPromise.types.triggerAction
+) {
+    yield call(implementPromiseAction, action, function* () {
+        yield put(isBoardLoading(true));
+        try {
+            const editTaskData = action.payload;
+            const { data }: AxiosResponse<ITask> = yield call(
+                apiSagaRequest,
+                'put',
+                TASK_API.EDIT_TASKS,
+                editTaskData.taskData
+            );
+            yield put(isBoardLoading(false));
+            return data;
+        } catch (error: any) {
+            console.log(error);
+            yield put(isBoardLoading(false));
+            yield put(
+                showNotification({
+                    message: error?.response?.data?.message,
+                    type: 'error',
+                })
+            );
+            return null;
         }
     });
 }
@@ -305,7 +335,7 @@ function* deleteTaskGenerator(action: PayloadAction<IDeleteTaskPayload>) {
         });
         yield put(deleteTaskSuccess(action.payload));
         yield put(isBoardLoading(false));
-    } catch (error) {
+    } catch (error: any) {
         console.log(error);
         yield put(isBoardLoading(false));
         yield put(
@@ -332,7 +362,7 @@ function* searchTasksGenerator(action: PayloadAction<ISearchTasksPayload>) {
         );
         yield put(searchTasksSuccess(data));
         yield put(setIsSearchTasksLoading(false));
-    } catch (error) {
+    } catch (error: any) {
         console.log(error);
         yield put(setIsSearchTasksLoading(false));
         yield put(
@@ -354,7 +384,7 @@ function* switchStageTaskGenerator(action: PayloadAction<IDropData>) {
             { stageId: taskData.to },
             { params: { taskId: taskData.id } }
         );
-    } catch (error) {
+    } catch (error: any) {
         console.log(error);
         showNotification({
             message: error?.response?.data?.message,
@@ -375,7 +405,7 @@ function* addSubTaskGenerator(action: PayloadAction<IAddTaskPayload>) {
         );
         yield put(addSubTaskSuccess(data));
         yield put(seIsSubTaskLoading(false));
-    } catch (error) {
+    } catch (error: any) {
         console.log(error);
         yield put(seIsSubTaskLoading(false));
         showNotification({
@@ -393,7 +423,7 @@ function* deleteSubTaskGenerator(action: PayloadAction<IDeleteSubTaskPayload>) {
             data: { taskId: deleteTaskData._id },
         });
         yield put(deleteSubTaskSuccess(action.payload));
-    } catch (error) {
+    } catch (error: any) {
         console.log(error);
         showNotification({
             message: error?.response?.data?.message,
@@ -415,7 +445,7 @@ function* addCommentGenerator(action: PayloadAction<IAddTaskPayload>) {
         );
         yield put(addCommentSuccess(data));
         yield put(isCommentLoading(false));
-    } catch (error) {
+    } catch (error: any) {
         console.log(error);
         showNotification({
             message: error?.response?.data?.message,
@@ -437,7 +467,6 @@ function* addCommentGeneratorPromise(
                 COMMENT_API.ADD,
                 addCommentData
             );
-            console.log(data);
             if (data.parentId) {
                 yield put(
                     getSubCommentsPromise({
@@ -449,7 +478,7 @@ function* addCommentGeneratorPromise(
                 return;
             }
             yield put(addCommentSuccess(data));
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
             showNotification({
                 message: error?.response?.data?.message,
@@ -474,7 +503,7 @@ function* EditCommentGeneratorPromise(
                 editCommentData
             );
             yield put(editCommentSuccess(data));
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
             showNotification({
                 message: error?.response?.data?.message,
@@ -499,7 +528,7 @@ function* deleteCommentGeneratorPromise(
             );
             yield put(deleteCommentSuccess(data));
             return data;
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
             showNotification({
                 message: error?.response?.data?.message,
@@ -531,7 +560,7 @@ function* getSubCommentsGeneratorPromise(
             };
             yield put(getSubCommentsSuccess(subCommentData));
             return subCommentData;
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
             showNotification({
                 message: error?.response?.data?.message,
@@ -559,7 +588,7 @@ function* getSubCommentGenerator(action: PayloadAction<IGetSubCommentPayload>) {
             type: getSubCommentData.type,
         };
         yield put(getSubCommentsSuccess(subCommentData));
-    } catch (error) {
+    } catch (error: any) {
         console.log(error);
         showNotification({
             message: error?.response?.data?.message,
@@ -582,6 +611,7 @@ export default function* watchBoard() {
     yield takeLatest(addTaskPromise, addTaskGeneratorPromise);
     yield takeLatest(EDIT_TASK, editTaskGenerator);
     yield takeLatest(editTaskPromise, editTaskGeneratorPromise);
+    yield takeLatest(editTasksPromise, editTasksGeneratorPromise);
     yield takeLatest(DELETE_TASK, deleteTaskGenerator);
     yield takeLatest(SEARCH_TASKS, searchTasksGenerator);
 

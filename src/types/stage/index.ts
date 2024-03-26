@@ -4,6 +4,7 @@ export interface IStage {
     _id: string;
     name: string;
     color: string;
+    boardId: string;
     listPosition: number;
 }
 
@@ -22,11 +23,17 @@ export interface IGetStagesAction {
     payload: IGetStagesPayload;
 }
 
+export interface IUpdatedStagePosition {
+    id: string;
+    position: number;
+}
+
 export interface IAddStagePayload {
     name: string;
     color: string;
     boardId: string;
     listPosition: number;
+    updatedStagePositions: IUpdatedStagePosition[] | null;
 }
 
 export interface IAddStageAction {

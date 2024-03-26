@@ -29,6 +29,7 @@ export const STAGE_API = {
 export const TASK_API = {
     ADD: '/task',
     EDIT: '/task',
+    EDIT_TASKS: '/tasks',
     GET_SINGLE: '/task',
     GET_ALL: '/tasks',
     SEARCH: '/tasks/search',

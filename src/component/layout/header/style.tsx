@@ -4,7 +4,7 @@ export const StyledMainHeader = chakra('header', {
     baseStyle: {
         width: 'full',
         display: 'flex',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         alignItems: 'center',
         p: '2',
         mb: '6',

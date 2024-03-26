@@ -23,7 +23,7 @@ export type fieldSizesTypesUnion = 'sm' | 'md' | 'lg' | 'xl';
 
 type SelectProps = {
     value: string;
-    label: string;
+    label: string | number;
 };
 
 export type IFormFieldProps<T> = {

@@ -1,12 +1,13 @@
 import LeftPanel from './leftPanel';
 import RightPanel from './rightPanel';
-import { StyledMainHeader } from './style';
+import { StyledMainHeader, StyledTitle } from './style';
 
 function MainHeader({ title }: { title: string }) {
     return (
         <StyledMainHeader>
             <LeftPanel />
-            <RightPanel title={title} />
+            <StyledTitle>{title}</StyledTitle>
+            <RightPanel />
         </StyledMainHeader>
     );
 }

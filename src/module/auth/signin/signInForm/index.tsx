@@ -33,15 +33,11 @@ function LoginForm() {
 
     const formSubmitHandler = (formData: signInValidationSchemaType) => {
         const data = { ...formData };
-        console.log(data);
         dispatch(logIn(data));
     };
 
-    // const location = useLocation();
-
     useDidUpdate(() => {
         if (!isLoading && accessToken) {
-            // const from = location.state?.from?.pathname || BOARD_ROUTES.boards;
             navigate(BOARD_ROUTES.boards);
         }
     }, [isLoading]);

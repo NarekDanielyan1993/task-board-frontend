@@ -7,14 +7,11 @@ import refresh from 'src/store/api/auth';
 import { logout } from 'src/store/auth/action';
 import { logInSuccess } from 'src/store/auth/reducer';
 import { store } from 'src/store/createStore';
-import config from '../config';
 
 export const axiosInstance = axios.create({
     baseURL: process.env.SERVER_BASE_URL as string,
     timeout: 30000,
 });
-
-console.log(config.CLIENT_BASE_URL);
 
 axiosInstance.interceptors.request.use(
     (config) => {

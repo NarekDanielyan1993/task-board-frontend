@@ -26,6 +26,7 @@ const addTaskValidationSchema = z.object({
                 name: z.string(),
                 url: z.string(),
                 isUploaded: z.boolean(),
+                publicId: z.string(),
             })
         )
         .optional(),

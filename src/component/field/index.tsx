@@ -1,3 +1,4 @@
+import { Checkbox } from '@chakra-ui/react';
 import { Controller, FieldValues } from 'react-hook-form';
 import { IFormInputProps } from 'src/types';
 import ColorPicker from './colorPicker';
@@ -44,6 +45,15 @@ function FormInput<T extends FieldValues>({
                     name={name}
                     render={({ field: { value, onChange } }) => (
                         <StyledSelect
+                            menuPortalTarget={document.body}
+                            styles={{
+                                menuPortal: (base) => ({
+                                    ...base,
+                                    zIndex: 9999,
+                                    fontSize: '1rem',
+                                }),
+                            }}
+                            isDisabled={disabled}
                             isClearable={isClearable}
                             isSearchable={false}
                             mb={2}
@@ -122,22 +132,24 @@ function FormInput<T extends FieldValues>({
                     )}
                 />
             );
-        // case 'checkbox':
-        //     return (
-        //         <Controller
-        //             control={control}
-        //             name={name}
-        //             render={({ field: { value, onChange } }) => (
-        //                 <Checkbox
-        //                     isChecked={value}
-        //                     onChange={onChange}
-        //                     {...defaultOptions}
-        //                 >
-        //                     {label}
-        //                 </Checkbox>
-        //             )}
-        //         />
-        //     );
+        case 'checkbox':
+            return (
+                <Controller
+                    control={control}
+                    name={name}
+                    render={({ field: { value, onChange } }) => {
+                        return (
+                            <Checkbox
+                                isChecked={value}
+                                colorScheme={'blue'}
+                                onChange={onChange}
+                            >
+                                {label}
+                            </Checkbox>
+                        );
+                    }}
+                />
+            );
         case 'password': {
             return (
                 <Controller

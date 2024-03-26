@@ -13,6 +13,7 @@ function BoardPageHeader() {
             <Box
                 alignItems="flex-start"
                 display="flex"
+                flexWrap="wrap"
                 gap={4}
                 justifyContent="center"
             >

@@ -18,6 +18,7 @@ import {
     IEditCommentPayload,
     IEditTaskAction,
     IEditTaskPayload,
+    IEditTasksPayload,
     IGetBoardAction,
     IGetBoardPayload,
     IGetPrioritiesAction,
@@ -45,6 +46,7 @@ export const GET_TASKS = 'GET_TASKS';
 export const ADD_TASK = 'ADD_TASK';
 export const ADD_TASK_PROMISE = 'ADD_TASK_PROMISE';
 export const EDIT_TASK_PROMISE = 'EDIT_TASK_PROMISE';
+export const EDIT_TASKS_PROMISE = 'EDIT_TASKS_PROMISE';
 export const EDIT_TASK = 'EDIT_TASK';
 export const DELETE_TASK = 'DELETE_TASK';
 export const SWITCH_STAGE_TASK = 'SWITCH_STAGE_TASK';
@@ -64,6 +66,9 @@ export const addTaskPromise =
 
 export const editTaskPromise =
     promiseActionFactory<void>().create<IEditTaskPayload>(EDIT_TASK_PROMISE);
+
+export const editTasksPromise =
+    promiseActionFactory<void>().create<IEditTasksPayload>(EDIT_TASKS_PROMISE);
 
 export const getSubCommentsPromise =
     promiseActionFactory<void>().create<IGetSubCommentPayload>(

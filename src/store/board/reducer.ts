@@ -1,6 +1,5 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-param-reassign */
-import { arrayMove } from '@dnd-kit/sortable';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import {
     IComment,
@@ -14,7 +13,6 @@ import {
     ITask,
 } from 'src/types';
 import { IBoard, IBoardState } from 'src/types/board';
-import { IDndTask } from 'src/types/dnd';
 import {
     addCommentsToTask,
     findCommentAndRemove,
@@ -283,64 +281,6 @@ const boardSlice = createSlice({
         ) => {
             state.tasks.data = action.payload;
         },
-        switchTaskBetweenStages: (
-            state: IBoardState,
-            action: PayloadAction<IDndTask>
-        ) => {
-            const { sourceId, destinationId, type } = action.payload;
-
-            console.log(sourceId);
-            console.log(destinationId);
-
-            if (type === 'task') {
-                const sourceIndex = state.tasks.data.findIndex(
-                    (t) => t._id === sourceId
-                );
-
-                const destinationIndex = state.tasks.data.findIndex(
-                    (t) => t._id === destinationId
-                );
-
-                console.log(sourceIndex);
-                console.log(destinationIndex);
-
-                state.tasks.data = state.tasks.data.map((task, index) => {
-                    if (index === sourceIndex) {
-                        return {
-                            ...task,
-                            stageId: state.tasks.data[destinationIndex].stageId,
-                        };
-                    }
-                    return task;
-                });
-
-                state.tasks.data = arrayMove(
-                    state.tasks.data,
-                    sourceIndex,
-                    destinationIndex
-                );
-            }
-
-            if (type === 'stage') {
-                const sourceIndex = state.tasks.data.findIndex(
-                    (t) => t._id === sourceId
-                );
-                state.tasks.data = state.tasks.data.map((task, index) => {
-                    if (index === sourceIndex) {
-                        return {
-                            ...task,
-                            stageId: destinationId,
-                        };
-                    }
-                    return task;
-                });
-                state.tasks.data = arrayMove(
-                    state.tasks.data,
-                    sourceIndex,
-                    sourceIndex
-                );
-            }
-        },
         isCommentLoading: (
             state: IBoardState,
             action: PayloadAction<boolean>
@@ -432,7 +372,6 @@ export const {
     addTaskSuccess,
     editTaskSuccess,
     deleteTaskSuccess,
-    switchTaskBetweenStages,
     searchTasksSuccess,
     setIsSearchTasksLoading,
 

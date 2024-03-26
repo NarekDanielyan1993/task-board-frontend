@@ -31,6 +31,10 @@ function AttachmentPreview({
             <input {...register(`attachments.${index}.name`)} type="hidden" />
             <input {...register(`attachments.${index}.url`)} type="hidden" />
             <input
+                {...register(`attachments.${index}.publicId`)}
+                type="hidden"
+            />
+            <input
                 {...register(`attachments.${index}.isUploaded`)}
                 type="hidden"
             />

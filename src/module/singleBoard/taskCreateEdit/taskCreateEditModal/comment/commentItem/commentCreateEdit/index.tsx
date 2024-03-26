@@ -22,7 +22,6 @@ function CommentCreateEdit({ onCancel, onAction, text }: ICommentCreateEdit) {
         });
 
     const formSubmitHandler = (formData: AddEditCommentFormType) => {
-        console.log(formData);
         onAction(formData);
         setValue('text', '');
     };

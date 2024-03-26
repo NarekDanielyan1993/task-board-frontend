@@ -6,7 +6,6 @@ const StyledStageContainer = chakra(Flex, {
         flexGrow: 1,
         maxW: '6xl',
         width: 'full',
-        flexDir: { base: 'column', lg: 'row' },
         gap: 4,
         mx: 'auto',
         mt: 6,

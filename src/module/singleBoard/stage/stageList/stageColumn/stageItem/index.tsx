@@ -38,18 +38,16 @@ function StageItem({ task }: { task: ITask }) {
     const { value: isConfirmOpen, toggle: setConfirm } = useToggle(false);
     const { data: priorities } = useAppSelector(prioritiesSelector);
 
-    const priority = priorities.find((pr) => pr.value === taskPriorityId)
-        ?.label;
+    const priority = priorities.find(
+        (pr) => pr.value === taskPriorityId
+    )?.label;
 
     const { attributes, listeners, setNodeRef, transform, transition } =
         useSortable({
             id: task._id,
-            data: { type: 'Task', task },
-            transition: {
-                duration: 500,
-                easing: 'cubic-bezier(0.25, 1, 0.5, 1)',
-            },
+            data: { type: 'Task', stageId: task.stageId, task },
         });
+
     const style = {
         transform: CSS.Transform.toString(transform),
         transition,

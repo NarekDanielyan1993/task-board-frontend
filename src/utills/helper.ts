@@ -1,20 +1,16 @@
-import {
-    FILE_ALLOWED_FORMATS,
-    FILE_MAX_SIZE,
-    FILE_UPLOAD_BASE_URL,
-} from 'src/constant';
+import { FILE_ALLOWED_FORMATS, FILE_MAX_SIZE } from 'src/constant';
 import { IAttachment } from 'src/types';
 
 export const isArrayEmpty = <T>(arr: T[]) => {
     if (!Array.isArray(arr)) {
         return false;
     }
-    return arr.length < 1;
+    return arr.length === 0;
 };
 
 export const generateFileUrl = (image: IAttachment) => {
     if (image.isUploaded) {
-        return `${FILE_UPLOAD_BASE_URL}/${image.url}`;
+        return image.url;
     }
     return image.url;
 };
