@@ -9,27 +9,27 @@ import { useAppSelector } from 'src/store/createStore';
 function PrivateRoute() {
     const {
         accessToken,
-        refreshToken: { isLoading },
+        // refreshToken: { isLoading },
     } = useAppSelector(authSelector);
     const location = useLocation();
     const { getCookie } = useCookie();
     const isLoggedIn = getCookie('isLoggedIn');
+
+    const [isLoading, setIsLoading] = useState(true);
     const [isAuth, setIsAuth] = useState(true);
 
-    const [loading, setLoading] = useState(true);
-
     useEffect(() => {
-        if (isLoggedIn || accessToken) {
-            setIsAuth(true);
+        if (!(isLoggedIn || accessToken)) {
+            setIsAuth(false);
         }
-        setLoading(false);
-    }, []);
+        setIsLoading(false);
+    }, [isLoggedIn, accessToken]);
 
-    if (isLoading || loading) {
+    if (isLoading) {
         return <Loader />;
     }
 
-    if (!isLoggedIn || !accessToken) {
+    if (!isAuth) {
         return (
             <Navigate
                 replace
@@ -38,27 +38,6 @@ function PrivateRoute() {
             />
         );
     }
-
-    // useEffect(() => {
-    //     if (!isLoggedIn || !accessToken) {
-    //         setIsAuth(false);
-    //     }
-    // }, []);
-
-    // if (!isLoading && isLoggedIn && !accessToken) {
-    //     dispatch(refreshToken());
-    //     return null;
-    // }
-
-    // if (!isAuth) {
-    //     return (
-    //         <Navigate
-    //             replace
-    //             state={{ from: location.pathname }}
-    //             to={AUTH_ROUTES.LOGIN}
-    //         />
-    //     );
-    // }
 
     return <Outlet />;
 }
