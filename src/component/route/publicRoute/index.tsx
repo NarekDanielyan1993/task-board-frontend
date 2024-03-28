@@ -9,6 +9,7 @@ function PublicRoute() {
     const isLoggedIn = getCookie('isLoggedIn');
     const { accessToken } = useAppSelector(authSelector);
     const location = useLocation();
+
     if (isLoggedIn || accessToken) {
         return (
             <Navigate
