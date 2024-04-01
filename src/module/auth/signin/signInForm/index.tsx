@@ -18,6 +18,7 @@ function LoginForm() {
     const dispatch = useAppDispatch();
     const { isLoading, accessToken } = useAppSelector(authSelector);
     const navigate = useNavigate();
+    console.log(8989);
     const defaultValues = {
         name: '',
         email: '',
