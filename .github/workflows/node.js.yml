@@ -23,5 +23,5 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: 'npm'
-            - run: yarn install --network-timeout 100000
-            - run: yarn build
+            - run: npm install --network-timeout 100000
+            - run: npm run build build
