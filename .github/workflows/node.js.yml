@@ -26,5 +26,5 @@ jobs:
         cache: 'npm'
     - name: Install yarn
       run: npm install -g yarn
-    - run: yarn install
+    - run: yarn install --network-timeout 100000
     - run: yarn build
