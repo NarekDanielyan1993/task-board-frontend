@@ -25,5 +25,5 @@ jobs:
                   cache: 'npm'
             - run: yarn install
             - run: yarn build
-            env:
-              SERVER_BASE_URL: ${{ secrets.SERVER_BASE_URL }}
+              env:
+                SERVER_BASE_URL: ${{ secrets.SERVER_BASE_URL }}
