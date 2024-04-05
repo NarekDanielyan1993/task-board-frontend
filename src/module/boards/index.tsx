@@ -10,7 +10,6 @@ function Boards() {
     const { value, toggle } = useToggle(false);
 
     const { cards, isBoardsLoading } = useBoardsContext();
-    console.log(9898);
     return (
         <>
             {isBoardsLoading && <Loader />}
