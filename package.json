@@ -103,5 +103,6 @@
     "webpack-merge": "^5.9.0",
     "webpackbar": "^5.0.2"
   },
-  "browserslist": "> 0.25%, not dead"
+  "browserslist": "> 0.25%, not dead",
+  "packageManager": "yarn@4.1.1"
 }
