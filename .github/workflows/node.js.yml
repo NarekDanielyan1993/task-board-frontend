@@ -23,5 +23,7 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: 'npm'
+            - run: corepack enable
+            - run: yarn set version 1.22.21
             - run: yarn install --verbose
             - run: yarn build
