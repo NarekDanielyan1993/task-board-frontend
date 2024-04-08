@@ -2,8 +2,6 @@ import { Button, Flex, SimpleGrid } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import Link from 'src/component/button/link';
 import { AUTH_ROUTES } from 'src/constant';
-import BOARD_ROUTES from 'src/constant/route';
-import useDidUpdate from 'src/hooks/useDidUpdate';
 import useForm from 'src/hooks/useForm';
 import { logIn } from 'src/store/auth/action';
 import authSelector from 'src/store/auth/selector';
@@ -35,11 +33,11 @@ function LoginForm() {
         dispatch(logIn(data));
     };
 
-    useDidUpdate(() => {
-        if (!isLoading && accessToken) {
-            navigate(BOARD_ROUTES.boards);
-        }
-    }, [isLoading]);
+    // useDidUpdate(() => {
+    //     if (!isLoading && accessToken) {
+    //         navigate(BOARD_ROUTES.boards);
+    //     }
+    // }, [isLoading]);
 
     return (
         <form onSubmit={handleSubmit(formSubmitHandler)}>
