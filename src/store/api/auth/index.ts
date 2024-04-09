@@ -12,30 +12,4 @@ const refresh = async (): Promise<ILogInResponse> => {
     return data;
 };
 
-// const useAuthWithGoogle = () => {
-//     const { value, toggle } = useToggle(false);
-//     const loginWithGoogle = async () => {
-//         toggle();
-//         try {
-//             const { data } = await axiosInstance.get(AUTH_API.LOGIN_GOOGLE);
-//             return data;
-//         } catch (error) {
-//             console.log(error);
-//         }
-//         toggle();
-//     };
-
-//     return {
-//         isLoading: value,
-//         loginWithGoogle,
-//     };
-// };
-
-// const loginWithGoogle = async (): Promise<ILogInResponse> => {
-//     const { data }: AxiosResponse<ILogInResponse> = await axiosInstance.get(
-//         AUTH_API.LOGIN_GOOGLE
-//     );
-//     return data;
-// };
-
 export default refresh;

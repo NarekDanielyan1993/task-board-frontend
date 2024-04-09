@@ -17,6 +17,8 @@ function PrivateRoute() {
 
     const [isLoading, setIsLoading] = useState(true);
     const [isAuth, setIsAuth] = useState(true);
+    console.log(isLoggedIn);
+    console.log(accessToken);
 
     useEffect(() => {
         if (!(isLoggedIn || accessToken)) {

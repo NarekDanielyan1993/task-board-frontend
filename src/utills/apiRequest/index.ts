@@ -11,6 +11,7 @@ import { store } from 'src/store/createStore';
 export const axiosInstance = axios.create({
     baseURL: process.env.SERVER_BASE_URL as string,
     timeout: 30000,
+    withCredentials: true,
 });
 
 axiosInstance.interceptors.request.use(
